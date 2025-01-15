@@ -1,6 +1,6 @@
 export var Global = {
     url: "http://fernando.ricoh-argentina-lab.com/",
-    //url: "http://172.21.82.63:3000/",
+    //url: "http://172.21.39.122:3000/",
     avatares: ["Avatar1.png",
         "Avatar2.png",
         "Avatar3.png",
