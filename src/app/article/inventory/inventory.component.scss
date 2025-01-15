@@ -1,0 +1,120 @@
+.container {
+  display: flex;
+  width: 100ih;
+  height: calc(100vh - 115px);
+  margin: 0px auto;
+  overflow: hidden;
+  flex-direction: column;
+  text-align: center;
+  border: 3px solid rgb(209, 101, 101);
+  border-radius: 20px;
+  --mat-sort-arrow-color: white;
+}
+
+.table {
+  width: 100%;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+}
+
+.form-row mat-form-field+button {
+  margin-left: 20px;
+}
+
+/*********************************************/
+.button-row {
+  display: table-cell;
+  max-width: 600px;
+  margin-left: 20px;
+}
+
+.button-row .mat-mdc-button-base {
+  margin: 0px 0px 0px 0;
+}
+
+.form-flex-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+.container-form-data {
+  margin-top: 12px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  width: 100ih;
+  justify-content: center;
+}
+
+/*********************************************/
+.table-estilos {
+  margin-top: 20px;
+
+  th {
+    background-color: rgb(209, 101, 101);
+    color: white;
+  }
+
+  tr {
+    height: 30px;
+  }
+
+  tr:hover {
+    background: whitesmoke;
+    cursor: pointer;
+  }
+}
+
+.mat-column-codigo {
+  width: 10%;
+  max-width: 10%;
+  border-right: 1px solid black;
+  padding-right: 24px;
+  text-align: center;
+}
+
+.mat-column-descripcion {
+  width: 35%;
+  max-width: 35%;
+  border-right: 1px solid black;
+  padding-right: 24px;
+  text-align: center;
+}
+
+.mat-column-unidad {
+  width: 15%;
+  max-width: 15%;
+  border-right: 1px solid black;
+  padding-right: 24px;
+  text-align: left;
+}
+
+.mat-column-cantidad {
+  width: 10%;
+  max-width: 10%;
+  border-right: 1px solid black;
+  padding-right: 24px;
+  text-align: left;
+  color: rgb(209, 101, 101);
+  font-weight: bold;
+}
+
+.mat-column-proveedores {
+  width: 30%;
+  max-width: 30%;
+  padding-right: 24px;
+  text-align: center;
+}

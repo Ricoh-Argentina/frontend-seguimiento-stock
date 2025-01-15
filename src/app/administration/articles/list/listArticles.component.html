@@ -1,0 +1,55 @@
+<div class="container">
+    @if (isLoadingResults || isRateLimitReached) {
+    <div class="spinner-container">
+        @if (isLoadingResults) {
+        <mat-spinner></mat-spinner>
+        }
+        @if (isRateLimitReached) {
+        <div class="spinner-container">
+            Se alcanzó el límite de velocidad de la API. Se restablecerá en un minuto.
+        </div>
+        }
+    </div>
+    }
+
+    <div class="table-estilos">
+        <table mat-table [dataSource]="data" multiTemplateDataRows matSort matSortActive="fecha_creacion"
+            matSortDisableClear matSortDirection="desc">
+
+            <!-- codigo Column -->
+            <ng-container matColumnDef="codigo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> CODIGO </th>
+                <td mat-cell *matCellDef="let row"> {{row.codigo}} </td>
+            </ng-container>
+
+            <!-- descripcion Column -->
+            <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> DESCRIPCION </th>
+                <td mat-cell *matCellDef="let row"> {{row.descripcion}}</td>
+            </ng-container>
+
+            <!-- unidad Column -->
+            <ng-container matColumnDef="unidad">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> UNIDAD </th>
+                <td mat-cell *matCellDef="let row"> {{row.unidad}} </td>
+            </ng-container>
+
+            <!-- Proveedores Column -->
+            <ng-container matColumnDef="proveedores">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> PROVEEDORES </th>
+                <td mat-cell *matCellDef="let row">
+                    @for (proveedor of row.proveedores; track $index) {
+                        {{proveedor['nombre_proveedor']}} 
+                    } 
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <mat-paginator class="" [length]="totalRecords" [pageSize]="pageLength" [pageSizeOptions]="[5, 10, 19]"
+            aria-label="Select page of users"></mat-paginator>
+    </div>
+</div>

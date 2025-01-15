@@ -1,0 +1,116 @@
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col-3{
+    width: 25%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.jc-sa{
+    justify-content: space-around;
+}
+
+.mt-30{
+    margin-top: 30px;
+}
+
+.row .col-6 + .col-6{
+    margin-left: 10px;
+}
+
+.center{
+    text-align: center;
+    padding-top: 10px;
+}
+.col-12 {
+    width: 100%;
+}
+
+.tarjetaKpi{
+    height: 120px;
+    background-color: rgb(209, 101, 101);
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.w-kpi {
+    height: 120px;
+}
+
+.w-graphic {
+    height: 500px;
+    //    overflow: hidden;
+}
+
+.form-flex-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.button-row {
+    display: table-cell;
+    max-width: 600px;
+    margin-left: 20px;
+}
+
+.button-row .mat-mdc-button-base {
+    margin: 0px 0px 0px 0;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 120px;
+}
+
+.spinner {
+    height: 399px;
+    max-height: 399px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.marging-top-spinner {
+    margin-top: 56px;
+}
+
+.marging-top-canvas{
+    margin-top: 87px;
+}
+
+.border {
+    border: 3px solid rgb(209, 101, 101);
+    border-radius: 20px;
+}
+
+.overflowHidden{
+    overflow: hidden;
+}
+
+.font-kpi{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 70px;
+}
+
+.title{
+    font-weight: bold;
+    font-size: 35px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(209, 101, 101);
+    text-shadow: 1px 1px 2px rgb(224, 108, 108);
+}

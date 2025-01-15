@@ -1,0 +1,69 @@
+.container {
+    width: 100ih;
+    height: calc(100vh - 203px);
+    margin: 0px auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    //justify-content: center;
+    text-align: center;
+    --mat-sort-arrow-color: white;
+}
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+}
+
+.form-container{
+    margin-top: 10px;
+}
+
+.table-estilos {
+    margin-top: 35px;
+
+    th {
+        background-color: rgb(209, 101, 101);
+        color: white;
+    }
+
+    tr {
+        height: 30px;
+    }
+
+    tr:hover {
+        background: whitesmoke;
+        cursor: pointer;
+    }
+}
+
+.mat-column-codigo {
+    width: 15%;
+    max-width: 15%;
+    border-right: 1px solid black;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-descripcion {
+    width: 40%;
+    max-width: 40%;
+    border-right: 1px solid black;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-unidad {
+    width: 15%;
+    max-width: 15%;
+    border-right: 1px solid black;
+    padding-right: 24px;
+    text-align: left;
+}
+
+.mat-column-proveedores {
+    width: 30%;
+    max-width: 30%;
+    padding-right: 24px;
+    text-align: center;
+}

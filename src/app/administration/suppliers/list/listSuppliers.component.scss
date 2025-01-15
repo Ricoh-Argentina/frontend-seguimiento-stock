@@ -1,0 +1,62 @@
+.container {
+    width: 100ih;
+    height: calc(100vh - 203px);
+    margin: 0px auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    //justify-content: center;
+    text-align: center;
+    --mat-sort-arrow-color: white;
+}
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+}
+
+.form-container{
+    margin-top: 10px;
+}
+
+.table-estilos {
+    margin-top: 35px;
+
+    th {
+        background-color: rgb(209, 101, 101);
+        color: white;
+    }
+
+    tr {
+        height: 30px;
+    }
+
+    tr:hover {
+        background: whitesmoke;
+        cursor: pointer;
+    }
+}
+
+.mat-column-nombre_proveedor {
+    width: 50%;
+    max-width: 50%;
+    border-right: 1px solid black;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-fecha_creacion {
+    width: 25%;
+    max-width: 25%;
+    border-right: 1px solid black;
+    padding-right: 24px;
+    text-align: left;
+}
+
+.mat-column-estado {
+    width: 25%;
+    max-width: 25%;
+    padding-right: 24px;
+    text-align: center;
+}
+

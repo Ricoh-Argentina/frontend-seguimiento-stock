@@ -1,0 +1,47 @@
+/* Contenedor general*/
+.container {
+    width:100ih;
+    height: calc(100vh - 203px);
+    margin: 0px auto;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.container form div mat-form-field + mat-form-field {
+    margin-left: 8px;
+}
+
+.container-form{
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;
+    align-items: center;*/
+    width: 50%;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.form-row{
+    display: flex;
+    flex-direction: row;
+    width: 100ih;
+}
+
+.form-column{
+    display: flex;
+    flex-direction: column;
+    width: 100ih;
+}
+
+.image{
+    display: flex;
+    width: 50%;
+}
+
+.avatar{
+    display: flex;
+    margin-left: 14px;
+    width: 55px;
+    height: 55px;
+}

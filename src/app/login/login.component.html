@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="data-login">
+            <img src="../../assets/img/Ricoh_solution_center.png" width="50%">
+            <h3>Por favor inicie sesión para continuar</h3>
+        <div class="container-form" >
+
+            <form class="form" [formGroup]="formularioUsuario">
+                <mat-form-field floatLabel="auto">
+                    <mat-label>Usuario</mat-label>
+                    <input matInput type="text" formControlName="NOMBRE_USUARIO" #NOMBRE_USUARIO autofocus>
+                </mat-form-field>
+
+                <mat-form-field floatLabel="auto">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" formControlName="PASSWORD" #PASSWORD>
+                </mat-form-field>
+
+                <button mat-fab extended color="primary" (click)="login()" [disabled]="formularioUsuario.invalid">
+                    <mat-icon>input</mat-icon>
+                    Iniciar sesión
+                </button>
+            </form>
+
+            <p class="">&copy; Ricoh Argentina 2024</p>
+        </div>
+    </div>
+
+    <div class="image">
+        <img src="../../assets/img/store-5619201_1920.jpg">
+    </div>
+
+</div>

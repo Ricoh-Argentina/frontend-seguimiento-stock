@@ -1,0 +1,145 @@
+<div class="container">
+    <div class="container-data">
+        @if (isLoadingResults || isRateLimitReached) {
+        <div class="spinner-container">
+            @if (isLoadingResults) {
+            <mat-spinner></mat-spinner>
+            }
+            @if (isRateLimitReached) {
+            <div class="spinner-container">
+                Se alcanzó el límite de velocidad de la API. Se restablecerá en un minuto.
+            </div>
+            }
+        </div>
+        }
+        <form class="container-form-data" [formGroup]="formFilter">
+
+            <div class="form-row">
+                <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                    <mat-label>Criterio Busqueda</mat-label>
+                    <input matInput type="text" formControlName="termino" #termino autofocus>
+                </mat-form-field>
+
+                <button mat-fab extended color="primary" style="width: 20%;" (click)="findUser()"
+                    [disabled]="formFilter.invalid">
+                    <mat-icon>input</mat-icon>
+                    Buscar
+                </button>
+
+            </div>
+        </form>
+
+        <div class="table-estilos">
+            <table mat-table [dataSource]="data" matSort matSortActive="fecha_creacion" matSortDisableClear
+                matSortDirection="desc">
+
+                <!-- Nombre y Apellido Column -->
+                <ng-container matColumnDef="nombre_y_apellido">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE Y APELLIDO </th>
+                    <td mat-cell *matCellDef="let row"> {{row.nombre_y_apellido}} </td>
+                </ng-container>
+
+                <!-- Usuario Column -->
+                <ng-container matColumnDef="usuario">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> USUARIO </th>
+                    <td mat-cell *matCellDef="let row"> {{row.usuario}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <!--<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+                <tr mat-row (click)="clickedRow(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+
+            <mat-paginator class="" [length]="totalRecords" [pageSize]="pageLength" [pageSizeOptions]="[5, 10, 17]"
+                aria-label="Select page of users"></mat-paginator>
+        </div>
+    </div>
+    
+    <form class="container-form" [formGroup]="formEditUser">
+
+        <mat-form-field appearance="outline" floatLabel="auto">
+            <mat-label>Nombre y Apellido</mat-label>
+            <input matInput type="text" formControlName="nombre_y_apellido" #nombre_y_apellido autofocus>
+        </mat-form-field>
+
+        <div class="form-row">
+            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+                <mat-label>Usuario</mat-label>
+                <input matInput type="text" formControlName="usuario" #usuario autofocus>
+            </mat-form-field>
+
+            <div class="slideToggle">
+                <mat-slide-toggle class="slideToggle-margin" 
+                                  formControlName="changePassword" 
+                                  (change)="isChangePassword()"
+                                  [checked]="isCheckedPassword"
+                                  [disabled]="isAvailable">
+                </mat-slide-toggle>
+            </div>
+
+            <mat-form-field appearance="outline" style="width: 40%;" floatLabel="auto">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="password" #password>
+            </mat-form-field>
+
+        </div>
+
+        <div class="form-row">
+            
+            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+                <mat-label>Rol</mat-label>
+                <mat-select formControlName="rol" #rol name="rol"
+                    [(value)]="selectedRol">
+                    @for (rol of roles; track roles) {
+                    <mat-option [value]="rol.nombre_rol">{{rol.nombre_rol}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" style="width: 40%;" floatLabel="auto">
+                <mat-label>Imagen</mat-label>
+                <mat-select formControlName="imagen" #imagen name="imagen"
+                    [(value)]="selectedImagen">
+                    @for (avatar of avatares; track avatares) {
+                    <mat-option [value]="avatar">{{avatar}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            
+            <div class="avatar">
+                @if (selectedImagen) {
+                    <img src="../../../../assets/img/{{selectedImagen}}">
+                }@else {
+                    <img src="../../../../assets/img/none.png">
+                }
+            </div>
+
+        </div>
+
+        <mat-form-field appearance="outline" floatLabel="auto">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" #email autofocus>
+        </mat-form-field>
+
+        <div class="button-row">
+            <div class="form-flex-container">
+                <div class="button-container">
+                    <button mat-fab extended color="warn" (click)="CancelForm()" [disabled]="isformEditUserActive">
+                        <mat-icon>cancel</mat-icon>
+                        Cancelar
+                    </button>
+                </div>
+                
+                <div class="button-container">
+                    <button mat-fab extended color="accent" (click)="UpdateUser()" [disabled]="formEditUser.invalid">
+                        <mat-icon>check</mat-icon>
+                        Modificar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

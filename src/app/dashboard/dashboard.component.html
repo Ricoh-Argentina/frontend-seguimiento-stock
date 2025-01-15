@@ -1,0 +1,104 @@
+<div class="column">
+
+    <div class="row w-kpi">
+        <div class="col-12">
+            <div class="row jc-sa">
+                <div class="col-3 tarjetaKpi">
+                    <h3>TOTAL CLIENTES SOLUTION CENTER</h3>
+                    <div class="mt-30">
+                        <span class="font-kpi" >{{QtyClients}}</span>
+                    </div>
+                    
+                </div>
+
+                <div class="col-3 tarjetaKpi">
+                    <h3>TOTAL IMAGENES MES ANTERIOR</h3>
+                    <div class="mt-30">
+                        <span class="font-kpi" >{{QtyImagesMonthBefore}}</span>
+                    </div>
+                </div>
+
+                <div class="col-3 tarjetaKpi">
+                    <h3>TOTAL IMAGENES MES ACTUAL</h3>
+                    <div class="mt-30">
+                        <span class="font-kpi" >{{QtyImagesMonthActual}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-30">
+
+        <div class="col-6 center">
+            <h2 class="title">Solution Center Mes a Mes</h2>
+        </div>
+        <div class="col-6 center">
+            <h2 class="title">Clientes x Mes</h2>
+        </div>
+    </div>
+
+    <div class="row w-graphic mt-30">
+
+        <div class="col-6 border overflowHidden">
+
+            @if(isLoadingChart1){
+            <div class="spinner marging-top-spinner">
+                <mat-spinner [diameter]="40"></mat-spinner>
+            </div>
+            }
+            <div class="container-chart marging-top-canvas">
+                <canvas id="barchart1"></canvas>
+            </div>
+
+        </div>
+
+        <div class="col-6 border overflowHidden">
+
+            <div class="form-flex-container">
+                <mat-form-field appearance="outline" floatLabel="auto">
+                    <mat-label>Mes</mat-label>
+                    <mat-select #mesSeleccionado name="mes" [(value)]="selectedMonth"
+                        (selectionChange)="onChangeMonth()">
+                        @for (mes of months; track months) {
+                        <mat-option [value]="mes.id">{{mes.mes}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" floatLabel="auto">
+                    <mat-label>Año</mat-label>
+                    <mat-select #yearSeleccionado name="year" [(value)]="selectedYear"
+                        (selectionChange)="onChangeYear()">
+                        @for (year of years; track years) {
+                        <mat-option [value]="year">{{year}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <div class="button-row">
+                    <div class="form-flex-container">
+                        <div class="button-container">
+                            <button mat-fab extended color="primary" (click)="changeData()">
+                                <mat-icon>input</mat-icon>
+                                Buscar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            @if(isLoadingChart2){
+            <div class="spinner">
+                <mat-spinner [diameter]="40"></mat-spinner>
+            </div>
+            }
+            <div class="container-chart">
+                <canvas id="barchart2"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+</div>

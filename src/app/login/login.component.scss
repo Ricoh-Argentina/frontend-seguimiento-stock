@@ -1,0 +1,39 @@
+/****Generales****/
+* {
+    padding: 0px;
+    margin: 0px;
+    text-decoration: none;
+}
+
+/* Contenedor general*/
+.container {
+    width:100ih;
+    height: 100vh;
+    margin: 0px auto;
+    overflow: hidden;
+    display: flex;
+}
+
+
+.data-login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-form{
+    text-align: center;
+    width: 50%;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+}
+
+.image{
+    display: flex;
+    width: 65%;
+}
+

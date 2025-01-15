@@ -1,0 +1,103 @@
+<div class="container">
+    <div class="table">
+        @if (isLoadingResults || isRateLimitReached) {
+        <div class="spinner-container">
+            @if (isLoadingResults) {
+            <mat-spinner></mat-spinner>
+            }
+            @if (isRateLimitReached) {
+            <div class="spinner-container">
+                Se alcanzó el límite de velocidad de la API. Se restablecerá en un minuto.
+            </div>
+            }
+        </div>
+        }
+
+
+        <div class="">
+
+            <form class="form-flex-container" [formGroup]="formFilter">
+                <mat-form-field appearance="outline" floatLabel="auto">
+                    <mat-label>Cliente</mat-label>
+                    <mat-select formControlName="clienteSeleccionado" #clienteSeleccionado name="cliente"
+                        [(value)]="selectedClient" (selectionChange)="onChangeClient()">
+                        <mat-option value="Todos">Todos</mat-option>
+                        @for (clientes of clientes; track clientes) {
+                        <mat-option [value]="clientes.nombre_cliente">{{clientes.nombre_cliente}}</mat-option>
+                        }
+                        <mat-option>None</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" floatLabel="auto">
+                    <mat-label>Fecha Inicio</mat-label>
+                    <input matInput [matDatepicker]="picker1" [formControl]="startDate"
+                        (dateChange)="verifyStartDate()">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" floatLabel="auto">
+                    <mat-label>Fecha Final</mat-label>
+                    <input matInput [matDatepicker]="picker2" [formControl]="endDate" (dateChange)="verifyEndDate()">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+
+                <div class="button-row">
+                    <div class="form-flex-container">
+                        <div class="button-container">
+                            <button mat-fab extended color="primary" (click)="findClients()" [disabled]="formFilter.invalid">
+                                <mat-icon>input</mat-icon>
+                                Buscar
+                            </button>
+                        </div>
+                        <div class="button-container">
+                            <button mat-fab color="accent" (click)="downloadFile()" [disabled]="isDownloadFileDisabled">
+                                <mat-icon>cloud_download</mat-icon>
+                            </button>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </form>
+
+        </div>
+
+        <div class="table-estilos">
+            <table mat-table [dataSource]="data" matSort matSortActive="fecha_creacion" matSortDisableClear
+                matSortDirection="desc">
+
+                <!-- Cliente Column -->
+                <ng-container matColumnDef="cliente">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> CLIENTE </th>
+                    <td mat-cell *matCellDef="let row"> {{row.cliente}} </td>
+                </ng-container>
+
+                <!-- Cantidad Column -->
+                <ng-container matColumnDef="imagenes">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> IMAGENES </th>
+                    <td mat-cell *matCellDef="let row"> {{row.imagenes}} </td>
+                </ng-container>
+
+                <!-- Unidad Column -->
+                <ng-container matColumnDef="hojas">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> HOJAS </th>
+                    <td mat-cell *matCellDef="let row"> {{row.hojas}} </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+
+            <mat-paginator class="" [length]="totalRecords" [pageSize]="pageLength"
+                [pageSizeOptions]="[5, 10, 20]" aria-label="Select page of users"></mat-paginator>
+        </div>
+
+    </div>
+</div>

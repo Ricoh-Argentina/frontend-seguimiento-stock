@@ -1,0 +1,19 @@
+<div class="container">
+    <form class="container-form" [formGroup]="formNewSupplier">
+
+        <mat-form-field appearance="outline" floatLabel="auto">
+            <mat-label>Nombre Proveedor</mat-label>
+            <input matInput type="text" formControlName="nombre_proveedor" #nombre_proveedor autofocus>
+        </mat-form-field>
+
+        <button mat-fab extended color="primary" (click)="createNewSupplier()" [disabled]="formNewSupplier.invalid">
+            <mat-icon>input</mat-icon>
+            Crear
+        </button>
+    </form>
+
+    <div class="image">
+        <img src="../../../../assets/img/administrate-4857301_1600.jpg">
+    </div>
+
+</div>
