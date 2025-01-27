@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
-  })
+})
 export class SecurityService {
     public url: string;
     private _usuario!: User;
@@ -21,14 +21,15 @@ export class SecurityService {
 
 
     public get usuario(): User {
-        if (this._usuario != null) {
-            return this._usuario;
-        } else {
-            if (sessionStorage.getItem("usuario") != null) {
-                const userJson = sessionStorage.getItem('usuario');
-                this._usuario = userJson !== null ? JSON.parse(userJson) as User: new User("","","",false,"","","","","");
-            }
+
+        if (this._usuario) { return this._usuario; }
+        const isClientSide = typeof window !== 'undefined' && window.sessionStorage;
+
+        if (isClientSide) {
+            const userJson = sessionStorage.getItem('usuario');
+            this._usuario = userJson ? JSON.parse(userJson) as User : new User("", "", "", false, "", "", "", "", "");
         }
+
         return this._usuario;
     }
 
@@ -54,14 +55,14 @@ export class SecurityService {
     }
 
     /*Metodo utilizado para revisar si el usuario esta autenticado o no */
-    isAuthenticated():boolean{
+    isAuthenticated(): boolean {
         let payload = this.obtenerPayloadToken(this.token);
-        if(payload != undefined && payload!="" && payload.id && payload.id.length > 0){
+        if (payload != undefined && payload != "" && payload.id && payload.id.length > 0) {
             return false;  //////CAMBIAR ESTO a TRUE para permitir que este logueado
         }
         return false;
     }
-    
+
     obtenerPayloadToken(token: string): any {
         if (token != null) {
             let payload = JSON.parse(window.atob(token.split(".")[1]));
@@ -73,16 +74,13 @@ export class SecurityService {
 
     /*********************************************************************************************************************/
     public get token(): string {
-        if (this._token != null) {
-            return this._token;
-        } else {
-            //console.log("Entre el get token igual a null");
-            if (sessionStorage.getItem("token") != null) {
-                //console.log("Entre en sessionstorage distinto de null");
-                const tokenJson = sessionStorage.getItem("token");
-                //console.log("token tiene ",tokenJson);
-                this._token = tokenJson !== null ? sessionStorage.getItem("token") as string: "";
-            }
+        if (this._token) { return this._token; }
+
+        const isClientSide = typeof window !== 'undefined' && window.sessionStorage;
+
+        if (isClientSide) {
+            const tokenJson = sessionStorage.getItem("token");
+            this._token = tokenJson ? sessionStorage.getItem("token") as string : "";
         }
         return this._token;
     }
@@ -100,11 +98,13 @@ export class SecurityService {
 
 
 
-    logout(): void{
-        this._token!=null;
-        this._usuario!=null;
-        //sessionStorage.clear();
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("usuario");
+    logout(): void {
+        this._token != null;
+        this._usuario != null;
+        const isClientSide = typeof window !== 'undefined' && window.sessionStorage;
+        if (isClientSide) {
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("usuario");
+        }
     }
 }
