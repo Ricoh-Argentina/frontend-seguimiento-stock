@@ -127,6 +127,6 @@ export class MenuComponent {
   }
 
   get userImage(){
-    return this.usuario.imagen ? `../../../assets/img/${this.usuario.imagen}` : `../../../assets/img/Avatar4.png`;
+    return this.usuario && this.usuario.imagen ? `../../../assets/img/${this.usuario.imagen}` : `../../../assets/img/Avatar4.png`;
   }
 }
