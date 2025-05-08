@@ -7,11 +7,13 @@ import { SecurityService } from "./security.service";
 import { User } from "../models/user";
 import { TaskSearch } from '../interfaces/task-search.interface';
 import { ReportSearch } from '../interfaces/report.interface';
+import { OrdersSearch } from '../interfaces/article.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileManagerService {
+
   public url: string;
   private _usuario!: User;
   private httpHeaders = new HttpHeaders().set('content-type', 'application/json');
@@ -34,6 +36,7 @@ export class FileManagerService {
 
   downloadFileTasksListFilter(bodydata: TaskSearch): Observable<any> {
     let find = "tareas?";
+    console.log(bodydata)
     if (bodydata.cliente) {
       find = find + "cliente=" + bodydata.cliente + "&";
     }
@@ -92,7 +95,7 @@ export class FileManagerService {
     }
 
 
-    return this._http.get<any>(this.url + find, { 
+    return this._http.get<any>(this.url + find, {
       headers: this.agregarAuthorizationHeader(),
       responseType: 'arraybuffer' as 'json'
     });
@@ -127,7 +130,42 @@ export class FileManagerService {
     }
 
 
-    return this._http.get<any>(this.url + find, { 
+    return this._http.get<any>(this.url + find, {
+      headers: this.agregarAuthorizationHeader(),
+      responseType: 'arraybuffer' as 'json'
+    });
+  }
+
+  downloadFileOrdersListFilter(bodydata: OrdersSearch) {
+    let find = "articulos/ordenes?";
+    if (bodydata.codigo_articulo) {
+      find = find + "codigo_articulo=" + bodydata.codigo_articulo + "&";
+    }
+    if (bodydata.nombre_proveedor) {
+      find = find + "nombre_proveedor=" + bodydata.nombre_proveedor + "&";
+    }
+    if (bodydata.tipo_movimiento) {
+      find = find + "tipo_movimiento=" + bodydata.tipo_movimiento + "&";
+    }
+    if (bodydata.numero_remito) {
+      find = find + "numero_remito" + bodydata.numero_remito + "&";
+    }
+    if (bodydata.fecha_inicio) {
+      find = find + "fecha_inicio=" + bodydata.fecha_inicio + "&";
+    }
+    if (bodydata.fecha_fin) {
+      find = find + "fecha_fin=" + bodydata.fecha_fin + "&";
+    }
+    if (bodydata.formato) {
+      find = find + "formato=" + bodydata.formato + "&";
+    }
+    if (bodydata.longitud_pagina) {
+      find = find + "longitud_pagina=" + bodydata.longitud_pagina + "&";
+    }
+    if (bodydata.numero_pagina) {
+      find = find + "numero_pagina=" + bodydata.numero_pagina;
+    }
+    return this._http.get<any>(this.url + find, {
       headers: this.agregarAuthorizationHeader(),
       responseType: 'arraybuffer' as 'json'
     });

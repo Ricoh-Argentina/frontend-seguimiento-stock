@@ -61,6 +61,7 @@ export interface OrdersSearch {
     nombre_usuario:     string;
     numero_orden:       number;
     numero_remito:      string;
+    formato:            string;
 }
 
 export interface OrderResponse {

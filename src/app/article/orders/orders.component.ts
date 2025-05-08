@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { merge, Observable, of as observableOf } from 'rxjs';
@@ -34,7 +34,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button'
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
@@ -42,6 +42,8 @@ import { catchError, finalize, tap, throwError } from 'rxjs';
 import { ArticleSearch, Articulo, OrdersSearch } from '../../interfaces/article.interface';
 import { ArticlesService } from '../../services/articles.service';
 import { SupplierSearch } from '../../interfaces/suppliers.interface';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import 'moment/locale/es';
 
 const MATERIAL_MODULES = [
   MatDatepickerModule,
@@ -62,7 +64,7 @@ const MATERIAL_MODULES = [
   imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss',
-  providers: [UserService, SecurityService, TaskListService, FileManagerService, provideNativeDateAdapter()]
+  providers: [UserService, SecurityService, TaskListService, FileManagerService,  {provide: MAT_DATE_LOCALE, useValue: 'es-ES'}, provideMomentDateAdapter() ]
 })
 export class OrdersComponent implements OnInit, AfterViewInit {
 
@@ -232,6 +234,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
             numero_orden: 0,
             longitud_pagina: this.paginator?.pageSize,
             numero_pagina: this.paginator?.pageIndex + 1,
+            formato: 'json'
           };
 
           return this._articlesService.getOrders(bodydata)
@@ -268,8 +271,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     let eDate = this.endDate.value !== null ? this.endDate.value.toISOString() : "";
 
     this.isLoadingResults = true;
+    this.isDownloadFileDisabled=false;
 
-    console.log(this.numero_remito.value);
     let bodydata: OrdersSearch = {
       fecha_inicio: sDate,
       fecha_fin: eDate,
@@ -281,6 +284,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       numero_orden: 0,
       longitud_pagina: this.paginator?.pageSize,
       numero_pagina: this.paginator?.pageIndex + 1,
+      formato: "json"
     };
 
     this._articlesService.getOrders(bodydata)
@@ -341,19 +345,23 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     let sDate = this.startDate.value !== null ? this.startDate.value.toISOString() : "";
     let eDate = this.endDate.value !== null ? this.endDate.value.toISOString() : "";
 
-    let bodydata: TaskSearch = {
-      cliente: "",
+    let bodydata: OrdersSearch = {
       fecha_fin: eDate,
       fecha_inicio: sDate,
-      producto: "",
       longitud_pagina: 100000,
       numero_pagina: 1,
-      formato: "csv"
+      formato: "csv",
+      nombre_proveedor: this.nombre_proveedor.value ?? "",
+      codigo_articulo: this.codigo_articulo.value ?? "",
+      tipo_movimiento:  this.tipo_movimiento.value ?? "",
+      nombre_usuario: "",
+      numero_orden: 0,
+      numero_remito: this.numero_remito.value ?? ""
     };
 
-    const fileName = `Reporte_${bodydata.cliente}_${bodydata.producto}_${bodydata.fecha_inicio}_${bodydata.fecha_fin}.csv`
+    const fileName = `Reporte_ordenes_${bodydata.fecha_inicio}_${bodydata.fecha_fin}.csv`
 
-    this._fileManagerService.downloadFileTasksListFilter(bodydata)
+    this._fileManagerService.downloadFileOrdersListFilter(bodydata)
       .subscribe(response => {
         this.manageFile(response, fileName);
         this.isLoadingResults = false;
