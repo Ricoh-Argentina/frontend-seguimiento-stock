@@ -7,7 +7,6 @@
             <mat-form-field appearance="outline" style="width: 30%;" floatLabel="auto">
                 <mat-label>Fecha Orden</mat-label>
                 <input matInput [matDatepicker]="picker1" [formControl]="DateSelected" (dateChange)="verifyDate()">
-                <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>

@@ -11,7 +11,7 @@ import { Rol } from '../../interfaces/variables.interface';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { catchError, finalize, tap, throwError } from 'rxjs';
 import { Global } from '../../services/global';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 /*Angular Material */
 import { MatInputModule } from '@angular/material/input';
@@ -27,6 +27,11 @@ import { ArticleSearch, Articulo, NewOrder } from '../../interfaces/article.inte
 import { Proveedores } from '../../interfaces/article.interface';
 import { state } from '@angular/animations';
 
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import 'moment/locale/es';
+
+
+
 const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatIconModule, MatButtonModule];
 
 
@@ -36,7 +41,7 @@ const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, 
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MATERIAL_MODULES],
   templateUrl: './movimiento.component.html',
   styleUrl: './movimiento.component.scss',
-  providers: [UserService, SecurityService, provideNativeDateAdapter()]
+  providers: [UserService, SecurityService, provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'es-ES'}, provideMomentDateAdapter()]
 })
 export class MovimientoComponent implements OnInit {
 

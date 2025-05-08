@@ -33,7 +33,6 @@
                     <mat-label>Fecha Inicio</mat-label>
                     <input matInput [matDatepicker]="picker1" [formControl]="startDate"
                         (dateChange)="verifyStartDate()">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
                     <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
@@ -41,7 +40,6 @@
                 <mat-form-field appearance="outline" floatLabel="auto">
                     <mat-label>Fecha Final</mat-label>
                     <input matInput [matDatepicker]="picker2" [formControl]="endDate" (dateChange)="verifyEndDate()">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
                     <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
