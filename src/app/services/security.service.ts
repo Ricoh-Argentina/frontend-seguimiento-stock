@@ -64,7 +64,7 @@ export class SecurityService {
     }
 
     obtenerPayloadToken(token: string): any {
-        if (token != null) {
+        if (token) {
             let payload = JSON.parse(window.atob(token.split(".")[1]));
             return payload;
         }

@@ -33,11 +33,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button'
-import {provideNativeDateAdapter} from '@angular/material/core';
+import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
 
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 import { catchError, finalize, tap, throwError } from 'rxjs';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import 'moment/locale/es';
+
 
 const MATERIAL_MODULES = [
   MatDatepickerModule, 
@@ -58,7 +61,7 @@ const MATERIAL_MODULES = [
   imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
-  providers: [UserService, SecurityService, TaskListService, FileManagerService, provideNativeDateAdapter()]
+  providers: [UserService, SecurityService, TaskListService, FileManagerService,  {provide: MAT_DATE_LOCALE, useValue: 'es-ES'}, provideMomentDateAdapter()]
 })
 export class TaskListComponent implements OnInit, AfterViewInit {
   public displayedColumns: string[] = ['cliente', 'producto', 'nombre_tarea', 'cantidad', 'unidad', 'fecha_creacion'];
@@ -192,10 +195,12 @@ export class TaskListComponent implements OnInit, AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
+          const sDate = this.startDate.value !== null ? this.startDate.value.toISOString() : "";
+          const eDate = this.endDate.value !== null ? this.endDate.value.toISOString() : "";
           let bodydata: TaskSearch = {
             cliente: this.selectedClient === "Todos" ? "" : this.selectedClient,
-            fecha_fin: "",
-            fecha_inicio: "",
+            fecha_inicio: sDate,
+            fecha_fin: eDate,
             producto: this.selectedProduct === "Todos" ? "" : this.selectedProduct,
             longitud_pagina: this.paginator?.pageSize,
             numero_pagina: this.paginator?.pageIndex + 1,

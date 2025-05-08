@@ -19,7 +19,7 @@
             <form class="container-form-data" [formGroup]="formFilter">
 
                 <div class="form-row jc-sa">
-                    
+
                     <mat-form-field appearance="outline" style="width: 12%;" floatLabel="auto">
                         <mat-label>Código Artículo</mat-label>
                         <mat-select formControlName="codigo_articulo" #codigo_articulo name="codigo_articulo"
@@ -29,7 +29,7 @@
                             }
                         </mat-select>
                     </mat-form-field>
-        
+
                     <mat-form-field appearance="outline" style="width: 14%;" floatLabel="auto">
                         <mat-label>Nombre Proveedor</mat-label>
                         <mat-select formControlName="nombre_proveedor" #nombre_proveedor name="nombre_proveedor"
@@ -49,17 +49,17 @@
                             }
                         </mat-select>
                     </mat-form-field>
-                    
+
                     <mat-form-field appearance="outline" style="width: 13%;" floatLabel="auto">
                         <mat-label>Número Remito</mat-label>
                         <input matInput type="text" formControlName="numero_remito" #numero_remito autofocus>
                     </mat-form-field>
-        
+
                     <mat-form-field appearance="outline" style="width: 13%;" floatLabel="auto">
                         <mat-label>Fecha Inicio</mat-label>
                         <input matInput [matDatepicker]="picker1" [formControl]="startDate"
                             (dateChange)="verifyStartDate()">
-                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                         <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
                         <mat-datepicker #picker1></mat-datepicker>
                     </mat-form-field>
@@ -68,7 +68,7 @@
                         <mat-label>Fecha Final</mat-label>
                         <input matInput [matDatepicker]="picker2" [formControl]="endDate"
                             (dateChange)="verifyEndDate()">
-                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                         <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
@@ -77,9 +77,12 @@
                         <mat-icon>close</mat-icon>
                     </button>
 
-                    <button mat-fab color="warn" (click)="findOrders()"
-                        [disabled]="formFilter.invalid">
+                    <button mat-fab color="warn" (click)="findOrders()" [disabled]="formFilter.invalid">
                         <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button mat-fab color="accent" (click)="downloadFile()" [disabled]="isDownloadFileDisabled">
+                        <mat-icon>cloud_download</mat-icon>
                     </button>
 
                 </div>
@@ -138,7 +141,7 @@
                 <ng-container matColumnDef="numero_orden">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> ORDEN </th>
                     <td mat-cell *matCellDef="let row"> {{row.numero_orden}} </td>
-                </ng-container> 
+                </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

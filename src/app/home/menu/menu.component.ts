@@ -125,4 +125,8 @@ export class MenuComponent {
     this._securitydService.logout();
     this._router.navigateByUrl("/");
   }
+
+  get userImage(){
+    return this.usuario.imagen ? `../../../assets/img/${this.usuario.imagen}` : `../../../assets/img/Avatar4.png`;
+  }
 }
