@@ -11,5 +11,7 @@ export var Global = {
         "Avatar7.png",
         "Avatar8.png"],
     movimientos: ["ingreso",
-        "egreso"]
+        "egreso"],
+    articulos:["Bobina"
+    ]
 };

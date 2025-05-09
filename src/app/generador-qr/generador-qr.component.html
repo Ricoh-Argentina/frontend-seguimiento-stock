@@ -1,0 +1,79 @@
+<div class="container">
+    
+    <form class="container-form" [formGroup]="formQRGenerator">
+
+        <div class="form-row">
+
+            <mat-form-field appearance="outline" style="width: 30%;" floatLabel="auto">
+                <mat-label>Fecha Creación</mat-label>
+                <input matInput [matDatepicker]="picker1" [formControl]="DateSelected">
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                <mat-label>Artículo</mat-label>
+                <mat-select formControlName="articulo" #articulo name="articulo"
+                    [(value)]="selectedArticulo" (valueChange)="changeArticle()">
+                    @for (articulo of articulos; track articulos) {
+                    <mat-option [value]="articulo">{{articulo}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                <mat-label>Número secuencia</mat-label>
+                <input matInput type="number" formControlName="numeroSecuencia" #numeroSecuencia autofocus>
+            </mat-form-field>
+
+        </div>
+
+        <div class="form-row mt-25">
+
+            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+                <mat-label>Cantidad</mat-label>
+                <input matInput type="number" formControlName="cantidad" #cantidad autofocus>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+                <mat-label>Peso</mat-label>
+                <input matInput type="number" formControlName="peso" #peso autofocus>
+            </mat-form-field>
+
+        </div>
+
+        
+        <div class="form-row mt-25">
+
+            <mat-form-field appearance="outline" style="width: 100%;" floatLabel="auto">
+                <mat-label>Descripcion</mat-label>
+                <input matInput type="text" formControlName="descripcion" #descripcion autofocus>
+            </mat-form-field>
+
+        </div>
+        
+        <div class="button-row">
+            <div class="form-flex-container">
+                <div class="button-container">
+                    <button mat-fab extended color="warn" (click)="cancelEtiqueta()" [disabled]="formQRGenerator.invalid">
+                        <mat-icon>cancel</mat-icon>
+                        Cancelar
+                    </button>
+                </div>
+                
+                <div class="button-container">
+                    <button mat-fab extended color="primary" (click)="imprimirEtiqueta()" [disabled]="formQRGenerator.invalid">
+                        <mat-icon>print</mat-icon>
+                        Imprimir
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="image">
+        <img src="../../../../assets/img/web-1738168_1920.jpg">
+    </div>
+
+</div>
