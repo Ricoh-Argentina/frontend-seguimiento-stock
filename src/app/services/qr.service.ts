@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError } from 'rxjs';
 import { User } from "../models/user";
 import { Global } from "./global";
 import { Router } from '@angular/router';
 import { SecurityService } from "./security.service";
-import { GetSecuencia } from '../interfaces/generador-qr.interface';
+import { GetSecuencia, GeneratorQR, QrResponse } from '../interfaces/generador-qr.interface';
 
 
 import { ArticleResponse, ArticleSearch, NewArticle, ArticleUpdateInterface, NewOrder, OrdersSearch, OrderResponse } from '../interfaces/article.interface';
@@ -17,6 +17,7 @@ export class QrService {
   public url: string;
   private _usuario!: User;
   private httpHeaders = new HttpHeaders().set('content-type', 'application/json');
+  private httpHeadersFile = new HttpHeaders();//.set('content-type', 'multipart/form-data');
 
   constructor(
     public _http: HttpClient,
@@ -34,15 +35,62 @@ export class QrService {
     return this.httpHeaders;
   }
 
+  private agregarAuthorizationHeaderFile() {
+    var token = this._securityService.token;
+    if (token != null) {
+      return this.httpHeadersFile.append('Authorization', 'Bearer ' + token);
+    }
+    return this.httpHeadersFile;
+  }
+
   getSecuencia(bodydata: GetSecuencia): Observable<number> {
     let find = "generador-qr/secuencia?";
     if (bodydata.tipo) {
       find = find + "tipo=" + bodydata.tipo;
     }
-    
+
     return this._http.get<number>(this.url + find, { headers: this.agregarAuthorizationHeader() });
   }
 
+  generatorQr(userData: GeneratorQR): Observable<QrResponse> {
+
+    let parametros = JSON.stringify(userData);
+
+    return this._http.post<QrResponse>(this.url + 'generador-qr', parametros, { headers: this.agregarAuthorizationHeader() });
+  }
+
+  generatorQrFile(formData: FormData): Observable<QrResponse[]> {
+
+    return this._http.post<QrResponse[]>(this.url + 'generador-qr/excel', formData, { headers: this.agregarAuthorizationHeaderFile() });
+  }
+
+  makeFileRequest(params: Array<string>, files: Array<File>, name: string){
+
+        const UrlFile = this.url + 'generador-qr/excel';
+
+        return new Promise(function(resolve, reject){
+            var formData: any = new FormData();
+            var xhr=new XMLHttpRequest();
+
+            for(var i =0; i<files.length; i++){
+                formData.append(name, files[i], files[i].name);
+            }
+
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    if(xhr.status==200){
+                        resolve(JSON.parse(xhr.response));
+                    }else{
+                        reject(xhr.response);
+                    }
+                }
+            }
+
+            const URL = 
+            xhr.open('POST', UrlFile, true);
+            xhr.send(formData);
+        });
+    }
 
 
 
@@ -50,7 +98,15 @@ export class QrService {
 
 
 
-  
+
+
+
+
+
+
+
+
+  /**********************************************************************************************************************************/
   newArticle(userData: NewArticle): Observable<any> {
 
     let parametros = JSON.stringify(userData);

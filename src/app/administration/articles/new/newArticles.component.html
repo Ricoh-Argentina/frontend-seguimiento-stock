@@ -1,10 +1,24 @@
 <div class="container">
     <form class="container-form" [formGroup]="formNewArticle">
 
-        <mat-form-field appearance="outline" floatLabel="auto">
+        <div class="form-row">
+            <mat-form-field appearance="outline" style="width: 70%;" floatLabel="auto">
             <mat-label>Descripción Artículo</mat-label>
             <input matInput type="text" formControlName="descripcion" #descripcion autofocus>
         </mat-form-field>
+
+
+            <mat-form-field appearance="outline" style="width: 30%;" floatLabel="auto">
+                <mat-label>Tipo Producto</mat-label>
+                <mat-select formControlName="tipo_producto" #tipo_producto name="tipo_producto"
+                    [(value)]="selectedTipo">
+                    @for (tipo of tipos; track tipos) {
+                    <mat-option [value]="tipo">{{tipo}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+        </div>
 
         <div class="form-row">
             <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
@@ -25,7 +39,7 @@
         </div>
 
         <div class="form-row">
-            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+            <mat-form-field appearance="outline" style="width: 100%;" floatLabel="auto">
                 <mat-label>Unidad</mat-label>
                 <mat-select formControlName="unidad" #unidad name="unidad"
                     [(value)]="selectedUnidad">
@@ -35,11 +49,12 @@
                 </mat-select>
             </mat-form-field>
 
+            <!--
             <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
                 <mat-label>Cantidad</mat-label>
                 <input matInput type="number" formControlName="cantidad" #cantidad autofocus>
             </mat-form-field>
-
+            -->
         </div>
 
         <button mat-fab extended color="primary" (click)="createNewArticle()" [disabled]="formNewArticle.invalid">

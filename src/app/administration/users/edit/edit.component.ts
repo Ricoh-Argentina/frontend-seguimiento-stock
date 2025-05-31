@@ -119,7 +119,7 @@ export class EditComponent implements OnInit, AfterViewInit {
     nombre_y_apellido: ['', [
       Validators.required,
       Validators.minLength(5),
-      Validators.maxLength(20)
+      Validators.maxLength(100)
     ]],
     rol: [{ value: '', disabled: true }, [
       Validators.required,

@@ -109,6 +109,28 @@
 
         </div>
 
+        <div class="form-row">
+            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+                <mat-label>Tipo Producto</mat-label>
+                <input matInput type="text" formControlName="tipo_producto" #tipo_producto autofocus>
+            </mat-form-field>
+
+            <div class="slideToggle">
+                <mat-slide-toggle class="slideToggle-margin" 
+                                  formControlName="estado" 
+                                  (change)="isChangeEstado()"
+                                  [checked]="isCheckedEstado"
+                                  [disabled]="isAvailable">
+                </mat-slide-toggle>
+            </div>
+
+            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+                <mat-label>Estado</mat-label>
+                <input matInput type="text" formControlName="estado" #estado autofocus>
+            </mat-form-field>
+
+        </div>
+
         <div class="button-row">
             <div class="form-flex-container">
                 <div class="button-container">

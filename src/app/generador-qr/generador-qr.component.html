@@ -12,18 +12,28 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
-                <mat-label>Artículo</mat-label>
-                <mat-select formControlName="articulo" #articulo name="articulo"
-                    [(value)]="selectedArticulo" (valueChange)="changeArticle()">
-                    @for (articulo of articulos; track articulos) {
-                    <mat-option [value]="articulo">{{articulo}}</mat-option>
+                <mat-label>Código Artículo</mat-label>
+                <mat-select formControlName="codigo_articulo" #codigo_articulo name="codigo_articulo"
+                    [(value)]="selectedCodigo" (valueChange)="changeCodeArticle()">
+                    @for (codigo of codigos; track codigos) {
+                    <mat-option [value]="codigo.codigo">{{codigo.codigo}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                <mat-label>Nombre Proveedor</mat-label>
+                <mat-select formControlName="nombre_proveedor" #nombre_proveedor name="nombre_proveedor"
+                    [(value)]="selectedProveedor" (valueChange)="changeProveedor()">
+                    @for (proveedor of proveedores; track proveedores) {
+                    <mat-option [value]="proveedor.nombre_proveedor">{{proveedor.nombre_proveedor}}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
                 <mat-label>Número secuencia</mat-label>
-                <input matInput type="number" formControlName="numeroSecuencia" #numeroSecuencia autofocus>
+                <input matInput type="number" formControlName="numero_secuencia" #numero_secuencia autofocus>
             </mat-form-field>
 
         </div>
@@ -51,11 +61,21 @@
             </mat-form-field>
 
         </div>
+
+        <div class="form-row mt-25">
+
+            <button type="button" mat-flat-button color="warn" (click)="fileInput.click()" style="width: 20%; height: 55px;">Seleccionar Planilla</button>
+            <input hidden (change)="getFile($event)" #fileInput type="file">
+            <!--<span class="file-name">{{selectedFilesView}}</span>-->
+            <mat-form-field appearance="outline" style="width: 80%;" floatLabel="auto">
+                <input matInput type="text" formControlName="selectedFilesView" #selectedFilesView autofocus>
+            </mat-form-field>
+        </div>
         
         <div class="button-row">
             <div class="form-flex-container">
                 <div class="button-container">
-                    <button mat-fab extended color="warn" (click)="cancelEtiqueta()" [disabled]="formQRGenerator.invalid">
+                    <button mat-fab extended color="warn" (click)="cancelarLimpiarEtiqueta()" [disabled]="formQRGenerator.invalid">
                         <mat-icon>cancel</mat-icon>
                         Cancelar
                     </button>

@@ -22,6 +22,8 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { Imagen } from '../../../interfaces/client.interface';
 
+declare var window: any;
+
 const MATERIAL_MODULES = [MatInputModule, MatSelectModule, MatFormFieldModule, MatIconModule, MatButtonModule];
 
 
@@ -37,10 +39,12 @@ export class NewArticlesComponent implements OnInit {
   //Variables para seleccionar listas
   public selectedProveedor: string = "";
   public selectedUnidad: string = "";
+  public selectedTipo: string = "";
 
   //String que levantan las listas de los menu desplegables
   public suppliers: Proveedores[] = [];
   public unidades: UnidadArticulo[] = [];
+  public tipos: string[] = [];
 
   public isLoadingResults: boolean = true;
 
@@ -55,6 +59,11 @@ export class NewArticlesComponent implements OnInit {
       Validators.minLength(5),
       Validators.maxLength(60)
     ]],
+    tipo_producto: ['', [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(150)
+    ]],
     unidad: ['', [
       Validators.required,
       Validators.minLength(1),
@@ -64,11 +73,6 @@ export class NewArticlesComponent implements OnInit {
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(150)
-    ]],
-    cantidad: [0, [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(20)
     ]]
   });
 
@@ -82,7 +86,7 @@ export class NewArticlesComponent implements OnInit {
     private _suppliersService: SuppliersService,
     private _variablesService: VariablesService
   ) {
-    
+      this.tipos = Global.tipos;
   }
 
   get codigo() {
@@ -93,6 +97,10 @@ export class NewArticlesComponent implements OnInit {
     return this.formNewArticle.controls['descripcion'];
   }
 
+  get tipo() {
+    return this.formNewArticle.controls['tipo_producto'];
+  }
+
   get unidad() {
     return this.formNewArticle.controls['unidad'];
   }
@@ -100,9 +108,6 @@ export class NewArticlesComponent implements OnInit {
     return this.formNewArticle.controls['proveedores'];
   }
 
-  get cantidad() {
-    return this.formNewArticle.controls['cantidad'];
-  }
 
   ngOnInit(): void {
     this.loadSuppliers();
@@ -158,8 +163,8 @@ export class NewArticlesComponent implements OnInit {
       codigo: this.codigo.value !== null ? this.codigo.value : '',
       descripcion: this.descripcion.value !== null ? this.descripcion.value : '',
       unidad: this.unidad.value !== null ? this.unidad.value : '',
-      cantidad: this.cantidad.value !== null ? this.cantidad.value : 0,
       proveedores: [...this.selectedProveedor],
+      tipo_articulo: this.tipo.value !== null ? this.tipo.value.toLocaleLowerCase() : '',
     };
 
     this._articlesService.newArticle(bodydata).subscribe(
@@ -167,6 +172,8 @@ export class NewArticlesComponent implements OnInit {
         next: (resultado) => {
             alert("Articulo creado con exito a las " + new Date());
             this.formNewArticle.reset();
+            //this._router.navigateByUrl('/home/administration/articles');
+            window.location.reload();
         },
         error: (error) => {
           console.log(error);

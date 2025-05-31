@@ -47,10 +47,19 @@ const MATERIAL_MODULES = [MatButtonModule, MatDatepickerModule, MatSelectModule,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
   templateUrl: './listArticles.component.html',
   styleUrl: './listArticles.component.scss',
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed,void', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
   providers: [SecurityService, ArticlesService, provideNativeDateAdapter()]
 })
 export class ListArticlesComponent implements OnInit, AfterViewInit {
-  public displayedColumns: string[] = ['codigo', 'descripcion', 'unidad', 'proveedores'];
+  public displayedColumns: string[] = ['codigo', 'descripcion', 'unidad', 'cantidad_total', 'proveedores', 'esta_activo'];
+  public displayedColumnsAux: string[] = ['nombre_proveedor', 'cantidad', 'esta_activo'];
+  public displayedColumnsWithExpand: string [] = [...this.displayedColumns, 'expand'];
   public url: string;
   public data: Articulo[] = [];
   public pageNumber: number = 0;
@@ -62,6 +71,9 @@ export class ListArticlesComponent implements OnInit, AfterViewInit {
   public isRateLimitReached = false;
   
   datoSeleccionado: boolean = false;
+
+  /* Tabla expansion */
+  public expandedElement: Articulo[] | null = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

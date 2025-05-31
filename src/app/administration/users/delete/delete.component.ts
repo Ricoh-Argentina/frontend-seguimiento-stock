@@ -118,7 +118,7 @@ export class DeleteComponent implements OnInit, AfterViewInit {
     nombre_y_apellido: [{ value: '', disabled: true }, [
       Validators.required,
       Validators.minLength(5),
-      Validators.maxLength(20)
+      Validators.maxLength(100)
     ]],
     rol: [{ value: '', disabled: true }, [
       Validators.required,

@@ -17,11 +17,8 @@ import { RouterModule } from '@angular/router';
 /*Para que funcione httpclient */
 import { HttpClientModule } from '@angular/common/http';
 
-import { TaskSearch } from '../../interfaces/task-search.interface';
-import { Tarea } from '../../interfaces/tareas.interface';
-import { Client, Cliente } from '../../interfaces/client.interface';
-import { Ordenes, Proveedores } from '../../interfaces/article.interface';
-import { Product, Producto } from '../../interfaces/product.interface';
+import { Ordenes } from '../../interfaces/article.interface';
+import { Proveedores } from '../../interfaces/suppliers.interface';
 
 /*Angular Material */
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';

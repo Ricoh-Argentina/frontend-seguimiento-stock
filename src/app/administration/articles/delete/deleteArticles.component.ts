@@ -19,18 +19,9 @@ import { RouterModule } from '@angular/router';
 /*Para que funcione httpclient */
 import { HttpClientModule } from '@angular/common/http';
 
-import { TaskSearch } from '../../../interfaces/task-search.interface';
-import { Tarea } from '../../../interfaces/tareas.interface';
-import { Client } from '../../../interfaces/client.interface';
-import { ClientResult } from '../../../interfaces/client.interface';
-import { Product } from '../../../interfaces/product.interface';
-import { ProductsResult } from '../../../interfaces/product.interface';
-import { ProductsSearch } from '../../../interfaces/product.interface';
-import { UserInterface } from '../../../interfaces/user.interface';
 import { Rol, UnidadArticulo } from '../../../interfaces/variables.interface';
-import { UserResponse, Usuario, UserSearch, UserUpdateResponse, UserUpdateInterface } from '../../../interfaces/user.interface';
-import { ArticleSearch, ArticleResponse, Articulo, ArticleUpdateInterface, Proveedores, NewArticle } from '../../../interfaces/article.interface';
-
+import { ArticleSearch, Articulo } from '../../../interfaces/article.interface';
+import { Proveedores } from '../../../interfaces/suppliers.interface';
 
 /*Angular Material */
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -67,287 +58,303 @@ const MATERIAL_MODULES = [MatCheckboxModule, MatSlideToggleModule, MatButtonModu
 export class DeleteArticlesComponent implements OnInit, AfterViewInit {
 
   public displayedColumns: string[] = ['codigo', 'descripcion', 'proveedores'];
-    public url: string;
-    public data: Articulo[] = [];
-    public pageNumber: number = 0;
-    public totalRecords: number = 0;
-    public pageLength: number = 17;
-    public numberOfPages: number = 0;
-    public isLoadingResults: boolean = true;
-    public resultsLength = 0;
-    public isRateLimitReached = false;
-    public isChecked: boolean = true;
-  
-    //Variables para seleccionar listas
-    public selectedProveedor: string = "";
-    public selectedUnidad: string = "";
-  
-    //String que levantan las listas de los menu desplegables
-    public suppliers: Proveedores[] = [];
-    public unidades: UnidadArticulo[] = [];
-  
-    public selectedTermino: string = "";
-  
-    //Fechas
-    startDate = new FormControl(new Date());
-    endDate = new FormControl(new Date());
-  
-    datoSeleccionado: boolean = false;
-  
-    //Form
-    public isCheckedPassword: boolean = false;
-    public isformEditArticleActive: boolean = true;
-    public isAvailable: boolean = false;
-  
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
-    @ViewChild(MatSort) sort!: MatSort;
-  
-  
-    formFilter = this._formBuilder.group({
-      termino: ['', [
-        Validators.minLength(1),
-        Validators.maxLength(40)
-      ]]
-    });
-  
-    formEditArticle = this._formBuilder.group({
-      codigo: [{ value: '', disabled: true }, [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.maxLength(50)
-      ]],
-      descripcion: [{ value: '', disabled: true }, [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(60)
-      ]],
-      unidad: [{ value: '', disabled: true }, [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(50)
-      ]],
-      proveedores: [{ value: [""], disabled: true }, [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(150)
-      ]],
-      cantidad: [{ value: 0, disabled: true }, [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(20)
-      ]]
-    });
-  
-    constructor(
-      private _securityService: SecurityService,
-      private _articlesService: ArticlesService,
-      private _suppliersService: SuppliersService,
-      private _router: Router,
-      private _formBuilder: FormBuilder,
-      private _variablesService: VariablesService
-    ) {
-      this.url = Global.url;
-    }
-  
-  
-    get termino() {
-      return this.formFilter.controls['termino'];
-    }
-  
-    ngOnInit(): void {
-      this.loadSuppliers();
-      this.loadUnidades();
-    }
-  
-    loadSuppliers() {
-    
-        let bodydata: SupplierSearch = {
-          termino: "",
-          longitud_pagina: 10000,
-          numero_pagina: 1,
-        };
-    
-        this._suppliersService.getSuppliers(bodydata)
-          .pipe(
-            tap(data => {
-              this.suppliers = data.proveedores;
-    
-            }),
-            catchError(err => {
-              console.log("Error cargando los Proveedores ", err);
-              this._securityService.logout();
-              this._router.navigateByUrl("/");
-              return throwError(err);
-            }),
-            finalize(() => this.isLoadingResults = false)
-          )
-          .subscribe();
+  public url: string;
+  public data: Articulo[] = [];
+  public pageNumber: number = 0;
+  public totalRecords: number = 0;
+  public pageLength: number = 17;
+  public numberOfPages: number = 0;
+  public isLoadingResults: boolean = true;
+  public resultsLength = 0;
+  public isRateLimitReached = false;
+  public isChecked: boolean = true;
+
+  //Variables para seleccionar listas
+  public selectedProveedor: string = "";
+  public selectedUnidad: string = "";
+
+  //String que levantan las listas de los menu desplegables
+  public suppliers: Proveedores[] = [];
+  public unidades: UnidadArticulo[] = [];
+
+  public selectedTermino: string = "";
+
+  //Fechas
+  startDate = new FormControl(new Date());
+  endDate = new FormControl(new Date());
+
+  datoSeleccionado: boolean = false;
+
+  //Form
+  public isCheckedPassword: boolean = false;
+  public isformEditArticleActive: boolean = true;
+  public isAvailable: boolean = false;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+
+  formFilter = this._formBuilder.group({
+    termino: ['', [
+      Validators.minLength(1),
+      Validators.maxLength(40)
+    ]]
+  });
+
+  formEditArticle = this._formBuilder.group({
+    codigo: [{ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(4),
+      Validators.maxLength(50)
+    ]],
+    descripcion: [{ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(60)
+    ]],
+    unidad: [{ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(50)
+    ]],
+    proveedores: [{ value: [""], disabled: true }, [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(150)
+    ]],
+    cantidad: [{ value: 0, disabled: true }, [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(20)
+    ]],
+    tipo_producto: [{ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(150)
+    ]],
+    estado: { value: false, disabled: true }
+  });
+
+  constructor(
+    private _securityService: SecurityService,
+    private _articlesService: ArticlesService,
+    private _suppliersService: SuppliersService,
+    private _router: Router,
+    private _formBuilder: FormBuilder,
+    private _variablesService: VariablesService
+  ) {
+    this.url = Global.url;
+  }
+
+
+  get termino() {
+    return this.formFilter.controls['termino'];
+  }
+
+  ngOnInit(): void {
+    this.loadSuppliers();
+    this.loadUnidades();
+  }
+
+  loadSuppliers() {
+
+    let bodydata: SupplierSearch = {
+      termino: "",
+      longitud_pagina: 10000,
+      numero_pagina: 1,
+    };
+
+    this._suppliersService.getSuppliers(bodydata)
+      .pipe(
+        tap(data => {
+          this.suppliers = data.proveedores;
+
+        }),
+        catchError(err => {
+          console.log("Error cargando los Proveedores ", err);
+          this._securityService.logout();
+          this._router.navigateByUrl("/");
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
+  }
+
+  loadUnidades() {
+
+    this._variablesService.getUnidadArticulos()
+      .pipe(
+        tap(data => {
+          this.unidades = data;
+
+        }),
+        catchError(err => {
+          console.log("Error cargando las Unidades de proveedores ", err);
+          this._securityService.logout();
+          this._router.navigateByUrl("/");
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
+  }
+
+  ngAfterViewInit() {
+    // If the user changes the sort order, reset back to the first page.
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+
+          this.isLoadingResults = true;
+
+          let bodydata: ArticleSearch = {
+            termino: "",
+            longitud_pagina: this.paginator?.pageSize,
+            numero_pagina: this.paginator?.pageIndex + 1,
+          };
+
+          return this._articlesService.getArticles(bodydata)
+            .pipe(
+              catchError(() => observableOf(null))
+            );
+        }),
+        map(data => {
+          this.pageNumber = data?.numero_pagina ?? 1;
+          this.totalRecords = data?.total_registros ?? 0;
+          this.pageLength = this.paginator?.pageSize;
+          this.numberOfPages = data?.cantidad_paginas ?? 0;
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+          this.isRateLimitReached = data === null;
+
+          if (data === null) {
+            return [];
+          }
+
+          // Only refresh the result length if there is new data. In case of rate
+          // limit errors, we do not want to reset the paginator to zero, as that
+          // would prevent users from re-triggering requests.
+          this.resultsLength = data.total_registros;
+          return data.articulos;
+        }),
+      )
+      .subscribe(data => (this.data = data));
+  }
+
+  findArticle() {
+
+    let sDate = this.startDate.value !== null ? this.startDate.value.toISOString() : "";
+    let eDate = this.endDate.value !== null ? this.endDate.value.toISOString() : "";
+
+    this.isLoadingResults = true;
+
+    let bodydata: ArticleSearch = {
+      termino: this.termino.value !== null ? this.termino.value : "",
+      longitud_pagina: this.paginator?.pageSize,
+      numero_pagina: this.paginator?.pageIndex + 1,
+    };
+
+    this._articlesService.getArticles(bodydata)
+      .pipe(
+        tap(data => {
+          this.data = data.articulos;
+
+          this.pageNumber = data?.numero_pagina ?? 1;
+          this.totalRecords = data?.total_registros ?? 0;
+          this.pageLength = this.paginator?.pageSize;
+          this.numberOfPages = data?.cantidad_paginas ?? 0;
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+        }),
+        catchError(err => {
+          console.log("Error cargando los datos de Articulos ", err);
+          alert("Error cargando los datos de Articulos ");
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
+  }
+
+  get codigo() {
+    return this.formEditArticle.controls['codigo'];
+  }
+
+  get descripcion() {
+    return this.formEditArticle.controls['descripcion'];
+  }
+
+  get unidad() {
+    return this.formEditArticle.controls['unidad'];
+  }
+
+  get proveedores() {
+    return this.formEditArticle.controls['proveedores'];
+  }
+
+  get cantidad() {
+    return this.formEditArticle.controls['cantidad'];
+  }
+
+  get tipo() {
+    return this.formEditArticle.controls['tipo_producto'];
+  }
+
+  get estado() {
+    return this.formEditArticle.controls['estado'];
+  }
+
+  deleteArticle() {
+
+    this._articlesService.deleteArticle(this.codigo.value !== null ? this.codigo.value : "").subscribe(
+      {
+        next: (resultado) => {
+          this.findArticle();
+          this.formEditArticle.reset();
+          this.isformEditArticleActive = true;
+        },
+        error: (error) => {
+          console.log(error);
+          if (error.status == 403 || error.status == 404 || error.status == 400) {
+            alert(error.error.message);
+          }
+        },
+        complete: () => alert("Articulo borrado con exito")
       }
-    
-      loadUnidades() {
-    
-        this._variablesService.getUnidadArticulos()
-          .pipe(
-            tap(data => {
-              this.unidades = data;
-    
-            }),
-            catchError(err => {
-              console.log("Error cargando las Unidades de proveedores ", err);
-              this._securityService.logout();
-              this._router.navigateByUrl("/");
-              return throwError(err);
-            }),
-            finalize(() => this.isLoadingResults = false)
-          )
-          .subscribe();
-      }
-  
-    ngAfterViewInit() {
-      // If the user changes the sort order, reset back to the first page.
-      this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-  
-      merge(this.sort.sortChange, this.paginator.page)
-        .pipe(
-          startWith({}),
-          switchMap(() => {
-  
-            this.isLoadingResults = true;
-  
-            let bodydata: ArticleSearch = {
-              termino: "",
-              longitud_pagina: this.paginator?.pageSize,
-              numero_pagina: this.paginator?.pageIndex + 1,
-            };
-  
-            return this._articlesService.getArticles(bodydata)
-              .pipe(
-                catchError(() => observableOf(null))
-              );
-          }),
-          map(data => {
-            this.pageNumber = data?.numero_pagina ?? 1;
-            this.totalRecords = data?.total_registros ?? 0;
-            this.pageLength = this.paginator?.pageSize;
-            this.numberOfPages = data?.cantidad_paginas ?? 0;
-            // Flip flag to show that loading has finished.
-            this.isLoadingResults = false;
-            this.isRateLimitReached = data === null;
-  
-            if (data === null) {
-              return [];
-            }
-  
-            // Only refresh the result length if there is new data. In case of rate
-            // limit errors, we do not want to reset the paginator to zero, as that
-            // would prevent users from re-triggering requests.
-            this.resultsLength = data.total_registros;
-            return data.articulos;
-          }),
-        )
-        .subscribe(data => (this.data = data));
-    }
-  
-    findArticle() {
-  
-      let sDate = this.startDate.value !== null ? this.startDate.value.toISOString() : "";
-      let eDate = this.endDate.value !== null ? this.endDate.value.toISOString() : "";
-  
-      this.isLoadingResults = true;
-  
-      let bodydata: ArticleSearch = {
-        termino: this.termino.value !== null ? this.termino.value : "",
-        longitud_pagina: this.paginator?.pageSize,
-        numero_pagina: this.paginator?.pageIndex + 1,
-      };
-  
-      this._articlesService.getArticles(bodydata)
-        .pipe(
-          tap(data => {
-            this.data = data.articulos;
-  
-            this.pageNumber = data?.numero_pagina ?? 1;
-            this.totalRecords = data?.total_registros ?? 0;
-            this.pageLength = this.paginator?.pageSize;
-            this.numberOfPages = data?.cantidad_paginas ?? 0;
-            // Flip flag to show that loading has finished.
-            this.isLoadingResults = false;
-          }),
-          catchError(err => {
-            console.log("Error cargando los datos de Articulos ", err);
-            alert("Error cargando los datos de Articulos ");
-            return throwError(err);
-          }),
-          finalize(() => this.isLoadingResults = false)
-        )
-        .subscribe();
-    }
-  
-    get codigo() {
-      return this.formEditArticle.controls['codigo'];
-    }
-  
-    get descripcion() {
-      return this.formEditArticle.controls['descripcion'];
-    }
-  
-    get unidad() {
-      return this.formEditArticle.controls['unidad'];
-    }
-  
-    get proveedores() {
-      return this.formEditArticle.controls['proveedores'];
-    }
-  
-    get cantidad() {
-      return this.formEditArticle.controls['cantidad'];
-    }
-  
-    deleteArticle() {
-  
-      this._articlesService.deleteArticle(this.codigo.value !== null ? this.codigo.value : "").subscribe(
-        {
-          next: (resultado) => {
-            //Guardo en el sessionStorage el usuario y el token
-            console.log(resultado);
-            this.formEditArticle.reset();
-            this.isformEditArticleActive=true;
-          },
-          error: (error) => {
-            console.log(error);
-            if (error.status == 403 || error.status == 404) {
-  
-              alert("ERROR al Eliminar el Articulo!!!");
-            }
-          },
-          complete: () => alert("Articulo borrado con exito")
-        }
-      );
-    }
-  
-    clickedRow(row: Articulo) {
-      
-      /* MODIFICAR: esta asignacion cuando se modifique */
-      const proveedoresString: string[]= row.proveedores.map((p)=>{
-        return p.nombre_proveedor;
-      });
-      
-      this.formEditArticle.controls.codigo.setValue(row.codigo);
-      this.formEditArticle.controls.descripcion.setValue(row.descripcion);
-      this.formEditArticle.controls.unidad.setValue(row.unidad);
-      this.formEditArticle.controls.cantidad.setValue(row.cantidad);  
-      this.formEditArticle.controls.proveedores.setValue(proveedoresString);
-      this.isformEditArticleActive = false;
-    }
-  
-    CancelForm() {
-      this.formEditArticle.controls.codigo.setValue("");
-      this.formEditArticle.controls.descripcion.setValue("");
-      this.formEditArticle.controls.unidad.setValue("");
-      this.formEditArticle.controls.cantidad.setValue(0);
-      this.formEditArticle.controls.proveedores.setValue([]);
-      this.isformEditArticleActive = true;
-      this.isCheckedPassword = false;
-    }
+    );
+  }
+
+  clickedRow(row: Articulo) {
+
+    /* MODIFICAR: esta asignacion cuando se modifique */
+    const proveedoresString: string[] = row.proveedores.map((p) => {
+      return p.nombre_proveedor;
+    });
+
+    this.formEditArticle.controls.codigo.setValue(row.codigo);
+    this.formEditArticle.controls.descripcion.setValue(row.descripcion);
+    this.formEditArticle.controls.unidad.setValue(row.unidad);
+    this.formEditArticle.controls.cantidad.setValue(row.cantidad_total);
+    this.formEditArticle.controls.proveedores.setValue(proveedoresString);
+    this.formEditArticle.controls.tipo_producto.setValue(row.tipo_articulo);
+    this.formEditArticle.controls.estado.setValue(row.esta_activo);
+    this.isformEditArticleActive = false;
+  }
+
+  CancelForm() {
+    this.formEditArticle.controls.codigo.setValue("");
+    this.formEditArticle.controls.descripcion.setValue("");
+    this.formEditArticle.controls.unidad.setValue("");
+    this.formEditArticle.controls.cantidad.setValue(0);
+    this.formEditArticle.controls.proveedores.setValue([]);
+    this.formEditArticle.controls.tipo_producto.setValue("");
+    this.formEditArticle.controls.estado.setValue(false);
+    this.isformEditArticleActive = true;
+    this.isCheckedPassword = false;
+  }
 }
 

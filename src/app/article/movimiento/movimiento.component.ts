@@ -41,7 +41,7 @@ const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, 
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MATERIAL_MODULES],
   templateUrl: './movimiento.component.html',
   styleUrl: './movimiento.component.scss',
-  providers: [UserService, SecurityService, provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'es-ES'}, provideMomentDateAdapter()]
+  providers: [UserService, SecurityService, provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, provideMomentDateAdapter()]
 })
 export class MovimientoComponent implements OnInit {
 
@@ -174,7 +174,7 @@ export class MovimientoComponent implements OnInit {
     this.formNewOrder.controls.cantidad.disable()
     this.formNewOrder.controls.numero_remito.disable();
     this.formNewOrder.controls.tipo_movimiento.disable();
-    
+
   }
 
   createNewOrder() {
@@ -230,7 +230,7 @@ export class MovimientoComponent implements OnInit {
           this.formNewOrder.controls.nombre_proveedor.setValue("");
           this.proveedores = data.articulos[0].proveedores;
           this.formNewOrder.controls.descripcion.setValue(data.articulos[0].descripcion);
-          this.formNewOrder.controls.cantidadStock.setValue(data.articulos[0].cantidad);
+          this.formNewOrder.controls.cantidadStock.setValue(data.articulos[0].cantidad_total);
           this.formNewOrder.controls.nombre_proveedor.enable();
         }),
         catchError(err => {
@@ -245,6 +245,10 @@ export class MovimientoComponent implements OnInit {
   }
 
   changeProveedor() {
+    const infoSelectedProveedor = this.proveedores.filter(objeto => {
+      return objeto.nombre_proveedor.toLowerCase().includes(this.selectedProveedor.toLowerCase());
+    });
+    this.formNewOrder.controls.cantidadStock.setValue(infoSelectedProveedor[0].cantidad);
     this.formNewOrder.controls.tipo_movimiento.enable();
   }
 
