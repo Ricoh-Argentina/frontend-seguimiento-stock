@@ -18,10 +18,13 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Imagen } from '../interfaces/client.interface';
-import { GetSecuencia, GeneratorQR, QrResponse } from '../interfaces/generador-qr.interface';
+import { GetSecuencia, GeneratorQR, QrResponse,QrResponseFile } from '../interfaces/generador-qr.interface';
 import { Articulo } from '../interfaces/article.interface';
-import { Proveedores } from '../interfaces/article.interface';
 import { state } from '@angular/animations';
+import { ArticlesService } from '../services/articles.service';
+import { ArticleSearch, Proveedores } from '../interfaces/article.interface';
+import { SupplierSearch } from '../interfaces/suppliers.interface';
+import { SuppliersService } from '../services/suppliers.service';
 
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import 'moment/locale/es';
@@ -55,16 +58,20 @@ export class GeneradorQrComponent implements OnInit {
   public codigos: Articulo[] = [];
   public proveedores: Proveedores[] = [];
   //public tipos: string[] = [];
+  public articuloSeleccionado: Articulo[] = [];
 
   public isLoadingResults: boolean = true;
 
   public DateSelected = new FormControl(new Date());/* Creo fecha actual */
 
   formQRGenerator = this._formBuilder.group({
-    tipo: ['', [
-      Validators.required,
+    codigo_articulo: ['', [
       Validators.minLength(4),
       Validators.maxLength(30)
+    ]],
+    nombre_proveedor: [{ value: "", disabled: true }, [
+      Validators.minLength(4),
+      Validators.maxLength(40)
     ]],
     numero_secuencia: [{ value: 0, disabled: true }, [
       Validators.required,
@@ -100,13 +107,19 @@ export class GeneradorQrComponent implements OnInit {
     private _qrService: QrService,
     private _securityService: SecurityService,
     private _router: Router,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _articlesService: ArticlesService,
+    private _suppliersService: SuppliersService,
   ) {
-    //this.tipos = Global.articulos;
+    this.loadCodigoArticulos();
   }
 
-  get tipo() {
-    return this.formQRGenerator.controls['tipo'];
+  get codigo_articulo() {
+    return this.formQRGenerator.controls['codigo_articulo'];
+  }
+
+  get nombre_proveedor() {
+    return this.formQRGenerator.controls['nombre_proveedor'];
   }
 
   get numero_secuencia() {
@@ -129,16 +142,97 @@ export class GeneradorQrComponent implements OnInit {
     this.DateSelected.disable();
   }
 
+  loadCodigoArticulos() {
+
+    let bodydata: ArticleSearch = {
+      termino: "",
+      longitud_pagina: 10000,
+      numero_pagina: 1,
+    };
+
+    this._articlesService.getArticles(bodydata)
+      .pipe(
+        tap(data => {
+          this.codigos = data.articulos;
+
+        }),
+        catchError(err => {
+          console.log("Error cargando los Articulos ", err);
+          this._securityService.logout();
+          this._router.navigateByUrl("/");
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
+  }
+
+  /* Al selecccionar el articulo levando el dato y cargo los proveedores asociados a este producto */
+  /* además de levantar descripcion y cantidad restante */
+  changeCodeArticle() {
+
+    let bodydata: ArticleSearch = {
+      termino: this.selectedCodigo,
+      longitud_pagina: 1000,
+      numero_pagina: 1,
+    };
+
+    this._articlesService.getArticles(bodydata)
+      .pipe(
+        tap(data => {
+          this.articuloSeleccionado = data.articulos;
+          this.proveedores = data.articulos[0].proveedores;
+          this.formQRGenerator.controls.nombre_proveedor.enable();
+        }),
+        catchError(err => {
+          console.log("Error cargando los datos de Articulos ", err);
+          alert("Error cargando los datos de Articulos ");
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
+
+  }
+
+  changeProveedor() {
+    console.log(this.selectedProveedor);
+    
+    /*******************************************/
+    /* Revisar este codigo cuando se modifique permitir otras secuencias */
+    let bodydata: GetSecuencia = {
+      tipo: "bobina",
+    };
+    /*******************************************/
+
+    this._qrService.getSecuencia(bodydata)
+      .pipe(
+        tap(data => {
+          this.formQRGenerator.controls.numero_secuencia.setValue(data);
+          this.formQRGenerator.controls.peso.enable();
+          this.formQRGenerator.controls.descripcion.enable();
+        }),
+        catchError(err => {
+          console.log("Error solicitando la secuencia del producto", err);
+          alert("Error solicitando la secuencia del producto ");
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
+  }
+
   cancelarLimpiarEtiqueta() {
-    this.formQRGenerator.controls.tipo.setValue("");
+    this.formQRGenerator.controls.codigo_articulo.setValue("");
+    this.formQRGenerator.controls.nombre_proveedor.setValue("");
     this.formQRGenerator.controls.numero_secuencia.setValue(0);
     this.formQRGenerator.controls.descripcion.setValue("");
     this.formQRGenerator.controls.selectedFilesView.setValue("");
     this.formQRGenerator.controls.cantidad.setValue(1);
     this.formQRGenerator.controls.peso.setValue(0);
     this.formQRGenerator.controls.numero_secuencia.disable();
-    this.formQRGenerator.controls.cantidad.disable()
-
+    this.formQRGenerator.controls.cantidad.disable();
+    this.formQRGenerator.controls.nombre_proveedor.disable();
   }
 
   imprimirEtiqueta() {
@@ -147,7 +241,8 @@ export class GeneradorQrComponent implements OnInit {
 
     let bodydata: GeneratorQR = {
       fecha: aDate,
-      tipo: this.tipo.value !== null ? this.tipo.value : '',
+      codigo_articulo: this.codigo_articulo.value !== null ? this.codigo_articulo.value : '',
+      nombre_proveedor: this.nombre_proveedor.value !== null ? this.nombre_proveedor.value : '',
       numero_secuencia: this.numero_secuencia.value !== null ? this.numero_secuencia.value : 0,
       peso: this.peso.value !== null ? this.peso.value : 0,
       cantidad: this.cantidad.value !== null ? this.cantidad.value : 0,
@@ -157,6 +252,7 @@ export class GeneradorQrComponent implements OnInit {
     this._qrService.generatorQr(bodydata)
       .pipe(
         tap(data => {
+          console.log(data);
           generatePDF([data]);
         }),
         catchError(err => {
@@ -176,97 +272,40 @@ export class GeneradorQrComponent implements OnInit {
   }
 
   changeTipo() {
-/*
-    let bodydata: GetSecuencia = {
-      tipo: this.selectedTipo.toLowerCase(),
-    };
-
-
-    this._qrService.getSecuencia(bodydata)
-      .pipe(
-        tap(data => {
-          this.formQRGenerator.controls.numero_secuencia.setValue(data);
-          this.formQRGenerator.controls.peso.enable();
-          this.formQRGenerator.controls.descripcion.enable();
-        }),
-        catchError(err => {
-          console.log("Error solicitando la secuencia del producto", err);
-          alert("Error solicitando la secuencia del producto ");
-          return throwError(err);
-        }),
-        finalize(() => this.isLoadingResults = false)
-      )
-      .subscribe();
-*/
   }
 
-  /* Al selecccionar el articulo levando el dato y cargo los proveedores asociados a este producto */
-    /* además de levantar descripcion y cantidad restante */
-    changeCodeArticle() {
-  /*
-      let bodydata: ArticleSearch = {
-        termino: this.selectedCodigo,
-        longitud_pagina: 1000,
-        numero_pagina: 1,
-      };
-  
-      this._articlesService.getArticles(bodydata)
-        .pipe(
-          tap(data => {
-            this.articuloSeleccionado = data.articulos;
-            this.formNewOrder.controls.nombre_proveedor.setValue("");
-            this.proveedores = data.articulos[0].proveedores;
-            this.formNewOrder.controls.descripcion.setValue(data.articulos[0].descripcion);
-            this.formNewOrder.controls.cantidadStock.setValue(data.articulos[0].cantidad);
-            this.formNewOrder.controls.nombre_proveedor.enable();
-          }),
-          catchError(err => {
-            console.log("Error cargando los datos de Articulos ", err);
-            alert("Error cargando los datos de Articulos ");
-            return throwError(err);
-          }),
-          finalize(() => this.isLoadingResults = false)
-        )
-        .subscribe();
-  */
-    }
-  
-    changeProveedor() {
-      //this.formNewOrder.controls.tipo_movimiento.enable();
-    }
-
-  
   getFile(event: Event) {
 
     const target = event.target as HTMLInputElement;
 
     this.selectedFiles = target.files;
 
-    if(this.selectedFiles!.length>0 && this.selectedFiles != null){
+    if (this.selectedFiles!.length > 0 && this.selectedFiles != null) {
       const formData = new FormData();
 
-      Array.prototype.forEach.call(this.selectedFiles, (file: File)=>{
+      Array.prototype.forEach.call(this.selectedFiles, (file: File) => {
         formData.append("excel", file);
         this.selectedFilesView = this.selectedFilesView + `${file.name}`;
       });
 
       this.formQRGenerator.controls.selectedFilesView.setValue(this.selectedFilesView);
 
+      
       this._qrService.generatorQrFile(formData).subscribe({
-        next: (result: QrResponse[])=>{
-          generatePDF(result);
-          console.log(result);
+        next: (result: QrResponseFile) => {
+          generatePDF(result.result);
+          //console.log(result.result);
         },
-        error: (err: HttpErrorResponse)=>{
+        error: (err: HttpErrorResponse) => {
           console.log(err);
         },
-        complete: ()=>{
+        complete: () => {
           console.log("Peticion completada");
           this.cancelarLimpiarEtiqueta();
         }
       });
     }
-    
+
   }
 
 }

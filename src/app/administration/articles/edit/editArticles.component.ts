@@ -69,7 +69,7 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
   public isChecked: boolean = true;
 
   //Variables para seleccionar listas
-  public selectedProveedor: string = "";
+  public selectedProveedor: string []= [];
   public selectedUnidad: string = "";
 
   //String que levantan las listas de los menu desplegables
@@ -338,10 +338,20 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
   clickedRow(row: Articulo) {
     
     /* MODIFICAR: esta asignacion cuando se modifique */
-    const proveedoresString: string[]= row.proveedores.map((p)=>{
-      return p.nombre_proveedor;
+    const proveedoresString: string[]= [];
+    row.proveedores.forEach((p)=>{
+      if(p.esta_activo){
+        proveedoresString.push(p.nombre_proveedor);
+      }
     });
-    
+    //console.log(pro);
+
+    /*const proveedoresString: string[]= row.proveedores.map((p)=>{
+        return p.nombre_proveedor;      
+    });*/
+
+    this.selectedProveedor = proveedoresString;
+
     this.formEditArticle.controls.codigo.setValue(row.codigo);
     this.formEditArticle.controls.descripcion.setValue(row.descripcion);
     this.formEditArticle.controls.tipo_producto.setValue(row.tipo_articulo);

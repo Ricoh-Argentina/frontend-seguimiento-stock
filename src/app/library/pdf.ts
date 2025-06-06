@@ -51,7 +51,7 @@ const generatePDF = (
     });
 
 
-    content.push({ text: "\n" });
+    content.push({ text: "\n\n\n\n" });
 
   });
 

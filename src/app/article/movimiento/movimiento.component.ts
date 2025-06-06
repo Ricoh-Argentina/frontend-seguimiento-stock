@@ -97,6 +97,13 @@ export class MovimientoComponent implements OnInit {
     ]]
   });
 
+  formQr = this._formBuilder.group({
+    dataQR: ['', [
+      Validators.required,
+      Validators.minLength(30),
+      Validators.maxLength(300)
+    ]]
+  });
 
 
   constructor(
@@ -175,6 +182,10 @@ export class MovimientoComponent implements OnInit {
     this.formNewOrder.controls.numero_remito.disable();
     this.formNewOrder.controls.tipo_movimiento.disable();
 
+  }
+
+  cancelQR() {
+    this.formQr.controls.dataQR.setValue("");
   }
 
   createNewOrder() {
@@ -264,6 +275,14 @@ export class MovimientoComponent implements OnInit {
 
   }
 
+  leerQR(){
+
+  }
+
+  descontarProducto(){
+
+  }
+  
   verifyDate() {
 
   }

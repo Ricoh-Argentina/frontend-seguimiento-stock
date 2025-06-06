@@ -50,7 +50,9 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> PROVEEDORES </th>
                     <td mat-cell *matCellDef="let row">
                         @for (proveedor of row.proveedores; track $index) {
-                            {{proveedor['nombre_proveedor']}} 
+                            @if(proveedor['esta_activo']){
+                                {{proveedor['nombre_proveedor']}}
+                            }
                         } 
                     </td>
                 </ng-container>
@@ -84,7 +86,7 @@
                 <mat-select formControlName="proveedores" #proveedores name="proveedores"
                     [(value)]="selectedProveedor" multiple>
                     @for (proveedor of suppliers; track suppliers) {
-                    <mat-option [value]="proveedor.nombre_proveedor">{{proveedor.nombre_proveedor}}</mat-option>
+                        <mat-option [value]="proveedor.nombre_proveedor">{{proveedor.nombre_proveedor}}</mat-option>   
                     }
                 </mat-select>
             </mat-form-field>
@@ -97,7 +99,7 @@
                 <mat-select formControlName="unidad" #unidad name="unidad"
                     [(value)]="selectedUnidad">
                     @for (unidad of unidades; track unidades) {
-                    <mat-option [value]="unidad.unidad">{{unidad.unidad}}</mat-option>
+                        <mat-option [value]="unidad.unidad">{{unidad.unidad}}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>

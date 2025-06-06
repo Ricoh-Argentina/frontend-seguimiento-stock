@@ -5,10 +5,10 @@ import { User } from "../models/user";
 import { Global } from "./global";
 import { Router } from '@angular/router';
 import { SecurityService } from "./security.service";
-import { GetSecuencia, GeneratorQR, QrResponse } from '../interfaces/generador-qr.interface';
+import { GetSecuencia, GeneratorQR, QrResponse, QrResponseFile } from '../interfaces/generador-qr.interface';
 
 
-import { ArticleResponse, ArticleSearch, NewArticle, ArticleUpdateInterface, NewOrder, OrdersSearch, OrderResponse } from '../interfaces/article.interface';
+import { NewArticle, ArticleUpdateInterface, NewOrder, OrdersSearch, OrderResponse } from '../interfaces/article.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -59,12 +59,12 @@ export class QrService {
     return this._http.post<QrResponse>(this.url + 'generador-qr', parametros, { headers: this.agregarAuthorizationHeader() });
   }
 
-  generatorQrFile(formData: FormData): Observable<QrResponse[]> {
+  generatorQrFile(formData: FormData): Observable<QrResponseFile> {
 
-    return this._http.post<QrResponse[]>(this.url + 'generador-qr/excel', formData, { headers: this.agregarAuthorizationHeaderFile() });
+    return this._http.post<QrResponseFile>(this.url + 'generador-qr/excel', formData, { headers: this.agregarAuthorizationHeaderFile() });
   }
 
-  makeFileRequest(params: Array<string>, files: Array<File>, name: string){
+  /*makeFileRequest(params: Array<string>, files: Array<File>, name: string){
 
         const UrlFile = this.url + 'generador-qr/excel';
 
@@ -90,7 +90,7 @@ export class QrService {
             xhr.open('POST', UrlFile, true);
             xhr.send(formData);
         });
-    }
+    }*/
 
 
 

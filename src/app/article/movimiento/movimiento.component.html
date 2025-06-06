@@ -1,4 +1,6 @@
 <div class="container">
+    <section class="container-rows">
+
     
     <form class="container-form" [formGroup]="formNewOrder">
 
@@ -91,6 +93,45 @@
 
     </form>
 
+    <form class="container-form background" [formGroup]="formQr">
+
+        <div class="form-row mt-25">
+
+            <mat-form-field appearance="outline" style="width: 100%;" floatLabel="auto">
+                <mat-label>Datos QR</mat-label>
+                <input matInput type="text" formControlName="dataQR" #descripcion autofocus>
+            </mat-form-field>
+
+        </div>
+
+        <div class="button-row">
+            <div class="form-flex-container">
+                <div class="button-container">
+                    <button mat-fab extended color="warn" (click)="cancelQR()" [disabled]="formQr.invalid">
+                        <mat-icon>cancel</mat-icon>
+                        Cancelar
+                    </button>
+                </div>
+                
+                <div class="button-container">
+                    <button mat-fab extended color="warn" (click)="leerQR()">
+                        <mat-icon>qr_code_scanner</mat-icon>
+                        Leer QR
+                    </button>
+                </div>
+
+                <div class="button-container">
+                    <button mat-fab extended color="primary" (click)="descontarProducto()" [disabled]="formQr.invalid">
+                        <mat-icon>check</mat-icon>
+                        Utilizar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    </section>
     <div class="image">
         <img src="../../../../assets/img/web-1738168_1920.jpg">
     </div>

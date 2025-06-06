@@ -1,7 +1,8 @@
 export interface GeneratorQR {
-    tipo:         string;
+    codigo_articulo:  string;
+    nombre_proveedor: string;
     fecha:            string;
-    numero_secuencia:  number;
+    numero_secuencia: number;
     cantidad:         number;
     peso:             number;
     descripcion:      string;
@@ -16,7 +17,12 @@ export interface QrResponse {
     descripcion:      string;
     fecha:            string;
     peso:             number;
-    tipo:             string;
     numero_secuencia: number;
     qr:               string;
 }
+
+export interface QrResponseFile {
+    result: QrResponse[];
+    errors: any[];
+}
+
