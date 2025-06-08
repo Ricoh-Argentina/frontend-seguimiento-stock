@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { ArticlesService } from '../../services/articles.service';
@@ -30,8 +30,6 @@ import { state } from '@angular/animations';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import 'moment/locale/es';
 
-
-
 const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatIconModule, MatButtonModule];
 
 
@@ -44,6 +42,8 @@ const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, 
   providers: [UserService, SecurityService, provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, provideMomentDateAdapter()]
 })
 export class MovimientoComponent implements OnInit {
+
+  
 
   //Variables para seleccionar listas
   public selectedCodigo: string = "";
@@ -275,14 +275,14 @@ export class MovimientoComponent implements OnInit {
 
   }
 
-  leerQR(){
+  leerQR() {
 
   }
 
-  descontarProducto(){
+  descontarProducto() {
 
   }
-  
+
   verifyDate() {
 
   }

@@ -1,135 +1,137 @@
 <div class="container">
     <section class="container-rows">
 
-    
-    <form class="container-form" [formGroup]="formNewOrder">
 
-        <div class="form-row">
+        <form class="container-form" [formGroup]="formNewOrder">
 
-            <mat-form-field appearance="outline" style="width: 30%;" floatLabel="auto">
-                <mat-label>Fecha Orden</mat-label>
-                <input matInput [matDatepicker]="picker1" [formControl]="DateSelected" (dateChange)="verifyDate()">
-                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
+            <div class="form-row">
 
-            <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
-                <mat-label>Código Artículo</mat-label>
-                <mat-select formControlName="codigo_articulo" #codigo_articulo name="codigo_articulo"
-                    [(value)]="selectedCodigo" (valueChange)="changeCodeArticle()">
-                    @for (codigo of codigos; track codigos) {
-                    <mat-option [value]="codigo.codigo">{{codigo.codigo}}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
+                <mat-form-field appearance="outline" style="width: 30%;" floatLabel="auto">
+                    <mat-label>Fecha Orden</mat-label>
+                    <input matInput [matDatepicker]="picker1" [formControl]="DateSelected" (dateChange)="verifyDate()">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
-                <mat-label>Nombre Proveedor</mat-label>
-                <mat-select formControlName="nombre_proveedor" #nombre_proveedor name="nombre_proveedor"
-                    [(value)]="selectedProveedor" (valueChange)="changeProveedor()">
-                    @for (proveedor of proveedores; track proveedores) {
-                    <mat-option [value]="proveedor.nombre_proveedor">{{proveedor.nombre_proveedor}}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
+                <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                    <mat-label>Código Artículo</mat-label>
+                    <mat-select formControlName="codigo_articulo" #codigo_articulo name="codigo_articulo"
+                        [(value)]="selectedCodigo" (valueChange)="changeCodeArticle()">
+                        @for (codigo of codigos; track codigos) {
+                        <mat-option [value]="codigo.codigo">{{codigo.codigo}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
 
-        </div>
+                <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                    <mat-label>Nombre Proveedor</mat-label>
+                    <mat-select formControlName="nombre_proveedor" #nombre_proveedor name="nombre_proveedor"
+                        [(value)]="selectedProveedor" (valueChange)="changeProveedor()">
+                        @for (proveedor of proveedores; track proveedores) {
+                        <mat-option [value]="proveedor.nombre_proveedor">{{proveedor.nombre_proveedor}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
 
-        <div class="form-row mt-25">
+            </div>
 
-            <mat-form-field appearance="outline" style="width: 70%;" floatLabel="auto">
-                <mat-label>Descripcion artículo</mat-label>
-                <input matInput type="text" formControlName="descripcion" #descripcion autofocus>
-            </mat-form-field>
+            <div class="form-row mt-25">
 
-            <mat-form-field appearance="outline" style="width: 30%;" floatLabel="auto">
-                <mat-label>Cantidad en Stock</mat-label>
-                <input matInput type="number" formControlName="cantidadStock" #cantidadStock autofocus>
-            </mat-form-field>
+                <mat-form-field appearance="outline" style="width: 70%;" floatLabel="auto">
+                    <mat-label>Descripcion artículo</mat-label>
+                    <input matInput type="text" formControlName="descripcion" #descripcion autofocus>
+                </mat-form-field>
 
-        </div>
+                <mat-form-field appearance="outline" style="width: 30%;" floatLabel="auto">
+                    <mat-label>Cantidad en Stock</mat-label>
+                    <input matInput type="number" formControlName="cantidadStock" #cantidadStock autofocus>
+                </mat-form-field>
 
-        <div class="form-row mt-25">
+            </div>
 
-            <mat-form-field appearance="outline" style="width: 33%;" floatLabel="auto">
-                <mat-label>Tipo de Movimiento</mat-label>
-                <mat-select formControlName="tipo_movimiento" #tipo_movimiento name="tipo_movimiento"
-                    [(value)]="selectedMovimiento" (valueChange)="changeMovimiento()">
-                    @for (movimiento of movimientos; track movimientos) {
-                    <mat-option [value]="movimiento">{{movimiento}}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline" style="width: 33%;" floatLabel="auto">
-                <mat-label>Número Remito</mat-label>
-                <input matInput type="text" formControlName="numero_remito" #numero_remito autofocus>
-            </mat-form-field>
+            <div class="form-row mt-25">
 
-            <mat-form-field appearance="outline" style="width: 33%;" floatLabel="auto">
-                <mat-label>Cantidad Orden</mat-label>
-                <input matInput type="number" formControlName="cantidad" #cantidad autofocus>
-            </mat-form-field>
+                <mat-form-field appearance="outline" style="width: 33%;" floatLabel="auto">
+                    <mat-label>Tipo de Movimiento</mat-label>
+                    <mat-select formControlName="tipo_movimiento" #tipo_movimiento name="tipo_movimiento"
+                        [(value)]="selectedMovimiento" (valueChange)="changeMovimiento()">
+                        @for (movimiento of movimientos; track movimientos) {
+                        <mat-option [value]="movimiento">{{movimiento}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
 
-        </div>
+                <mat-form-field appearance="outline" style="width: 33%;" floatLabel="auto">
+                    <mat-label>Número Remito</mat-label>
+                    <input matInput type="text" formControlName="numero_remito" #numero_remito autofocus>
+                </mat-form-field>
 
-        <div class="button-row">
-            <div class="form-flex-container">
-                <div class="button-container">
-                    <button mat-fab extended color="warn" (click)="cancelOrder()" [disabled]="formNewOrder.invalid">
-                        <mat-icon>cancel</mat-icon>
-                        Cancelar
-                    </button>
-                </div>
-                
-                <div class="button-container">
-                    <button mat-fab extended color="primary" (click)="createNewOrder()" [disabled]="formNewOrder.invalid">
-                        <mat-icon>input</mat-icon>
-                        Crear
-                    </button>
+                <mat-form-field appearance="outline" style="width: 33%;" floatLabel="auto">
+                    <mat-label>Cantidad Orden</mat-label>
+                    <input matInput type="number" formControlName="cantidad" #cantidad autofocus>
+                </mat-form-field>
+
+            </div>
+
+            <div class="button-row">
+                <div class="form-flex-container">
+                    <div class="button-container">
+                        <button mat-fab extended color="warn" (click)="cancelOrder()" [disabled]="formNewOrder.invalid">
+                            <mat-icon>cancel</mat-icon>
+                            Cancelar
+                        </button>
+                    </div>
+
+                    <div class="button-container">
+                        <button mat-fab extended color="primary" (click)="createNewOrder()"
+                            [disabled]="formNewOrder.invalid">
+                            <mat-icon>input</mat-icon>
+                            Crear
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </form>
+        </form>
 
-    <form class="container-form background" [formGroup]="formQr">
+        <form class="container-form background" [formGroup]="formQr">
 
-        <div class="form-row mt-25">
+            <div class="form-row mt-25">
 
-            <mat-form-field appearance="outline" style="width: 100%;" floatLabel="auto">
-                <mat-label>Datos QR</mat-label>
-                <input matInput type="text" formControlName="dataQR" #descripcion autofocus>
-            </mat-form-field>
+                <mat-form-field appearance="outline" style="width: 100%;" floatLabel="auto">
+                    <mat-label>Datos QR</mat-label>
+                    <input matInput type="text" formControlName="dataQR" #descripcion autofocus>
+                </mat-form-field>
 
-        </div>
+            </div>
 
-        <div class="button-row">
-            <div class="form-flex-container">
-                <div class="button-container">
-                    <button mat-fab extended color="warn" (click)="cancelQR()" [disabled]="formQr.invalid">
-                        <mat-icon>cancel</mat-icon>
-                        Cancelar
-                    </button>
-                </div>
-                
-                <div class="button-container">
-                    <button mat-fab extended color="warn" (click)="leerQR()">
-                        <mat-icon>qr_code_scanner</mat-icon>
-                        Leer QR
-                    </button>
-                </div>
+            <div class="button-row">
+                <div class="form-flex-container">
+                    <div class="button-container">
+                        <button mat-fab extended color="warn" (click)="cancelQR()" [disabled]="formQr.invalid">
+                            <mat-icon>cancel</mat-icon>
+                            Cancelar
+                        </button>
+                    </div>
 
-                <div class="button-container">
-                    <button mat-fab extended color="primary" (click)="descontarProducto()" [disabled]="formQr.invalid">
-                        <mat-icon>check</mat-icon>
-                        Utilizar
-                    </button>
+                    <div class="button-container">
+                        <button mat-fab extended color="warn" (click)="leerQR()">
+                            <mat-icon>qr_code_scanner</mat-icon>
+                            Leer QR
+                        </button>
+                    </div>
+
+                    <div class="button-container">
+                        <button mat-fab extended color="primary" (click)="descontarProducto()"
+                            [disabled]="formQr.invalid">
+                            <mat-icon>check</mat-icon>
+                            Utilizar
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </form>
+        </form>
 
     </section>
     <div class="image">
