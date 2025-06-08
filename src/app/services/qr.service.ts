@@ -5,7 +5,7 @@ import { User } from "../models/user";
 import { Global } from "./global";
 import { Router } from '@angular/router';
 import { SecurityService } from "./security.service";
-import { GetSecuencia, GeneratorQR, QrResponse, QrResponseFile } from '../interfaces/generador-qr.interface';
+import { GetSecuencia, GeneratorQR, QrResponse, QrResponseFile, QrRegistrar } from '../interfaces/generador-qr.interface';
 
 
 import { NewArticle, ArticleUpdateInterface, NewOrder, OrdersSearch, OrderResponse } from '../interfaces/article.interface';
@@ -64,35 +64,12 @@ export class QrService {
     return this._http.post<QrResponseFile>(this.url + 'generador-qr/excel', formData, { headers: this.agregarAuthorizationHeaderFile() });
   }
 
-  /*makeFileRequest(params: Array<string>, files: Array<File>, name: string){
+  registrarQr(bodydata: QrRegistrar): Observable<any> {
 
-        const UrlFile = this.url + 'generador-qr/excel';
+    let parametros = JSON.stringify(bodydata);
 
-        return new Promise(function(resolve, reject){
-            var formData: any = new FormData();
-            var xhr=new XMLHttpRequest();
-
-            for(var i =0; i<files.length; i++){
-                formData.append(name, files[i], files[i].name);
-            }
-
-            xhr.onreadystatechange = function(){
-                if(xhr.readyState == 4){
-                    if(xhr.status==200){
-                        resolve(JSON.parse(xhr.response));
-                    }else{
-                        reject(xhr.response);
-                    }
-                }
-            }
-
-            const URL = 
-            xhr.open('POST', UrlFile, true);
-            xhr.send(formData);
-        });
-    }*/
-
-
+    return this._http.post<any>(this.url + 'generador-qr/registrar/' + bodydata.qr,  parametros, { headers: this.agregarAuthorizationHeader() });
+  }
 
 
 

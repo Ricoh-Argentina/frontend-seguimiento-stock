@@ -26,3 +26,7 @@ export interface QrResponseFile {
     errors: any[];
 }
 
+export interface QrRegistrar {
+    qr: string;
+}
+

@@ -5,6 +5,7 @@ import { ArticlesService } from '../../services/articles.service';
 import { SecurityService } from '../../services/security.service';
 import { VariablesService } from '../../services/variables.service';
 import { SuppliersService } from '../../services/suppliers.service';
+import { QrService } from '../../services/qr.service';
 import { Router } from '@angular/router';
 import { UserInterface } from '../../interfaces/user.interface';
 import { Rol } from '../../interfaces/variables.interface';
@@ -23,12 +24,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Imagen } from '../../interfaces/client.interface';
 import { ArticleSearch, Articulo, NewOrder } from '../../interfaces/article.interface';
+import { QrRegistrar } from '../../interfaces/generador-qr.interface';
 //import { Proveedores } from '../../interfaces/suppliers.interface';
 import { Proveedores } from '../../interfaces/article.interface';
 import { state } from '@angular/animations';
 
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import 'moment/locale/es';
+import { MatDialog } from '@angular/material/dialog';
+import { QrScannerModalQrcodeComponent } from './qr-scanner-modal-qrcode/qr-scanner-modal-qrcode.component';
 
 const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatIconModule, MatButtonModule];
 
@@ -49,6 +53,7 @@ export class MovimientoComponent implements OnInit {
   public selectedCodigo: string = "";
   public selectedProveedor: string = "";
   public selectedMovimiento: string = "";
+  public selectedQR: string = "";
 
   //String que levantan las listas de los menu desplegables
   public codigos: Articulo[] = [];
@@ -112,7 +117,9 @@ export class MovimientoComponent implements OnInit {
     private _router: Router,
     private _formBuilder: FormBuilder,
     private _variablesService: VariablesService,
-    private _suppliersService: SuppliersService
+    private _suppliersService: SuppliersService,
+    private dialog: MatDialog,
+    private _qrService: QrService
   ) {
     this.movimientos = Global.movimientos;
   }
@@ -275,12 +282,39 @@ export class MovimientoComponent implements OnInit {
 
   }
 
-  leerQR() {
+  leerQR(): void {
+    const dialogRef = this.dialog.open(QrScannerModalQrcodeComponent, {
+      width: '450px',
+      height: '570px',
+      disableClose: true
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.formQr.get('dataQR')?.setValue(result);
+        this.selectedQR = result;
+      }
+    });
   }
 
   descontarProducto() {
-
+    let bodydata: QrRegistrar = {
+      qr: this.selectedQR
+    }
+    this._qrService.registrarQr(bodydata)
+      .pipe(
+        tap(data => {
+          this.cancelQR();
+          alert("Orden creada con exito");
+        }),
+        catchError(err => {
+          console.log("Error descontando el articulo ", err);
+          alert("Error descontando el articulo ");
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
   }
 
   verifyDate() {
