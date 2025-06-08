@@ -8,7 +8,7 @@ import { SuppliersService } from '../../../services/suppliers.service';
 import { Router } from '@angular/router';
 import { SupplierSearch, Proveedores } from '../../../interfaces/suppliers.interface';
 import { Articulo, NewArticle } from '../../../interfaces/article.interface';
-import { UnidadArticulo } from '../../../interfaces/variables.interface';
+import { UnidadArticulo, TipoArticulo } from '../../../interfaces/variables.interface';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { catchError, finalize, tap, throwError } from 'rxjs';
 import { Global } from '../../../services/global';
@@ -44,7 +44,7 @@ export class NewArticlesComponent implements OnInit {
   //String que levantan las listas de los menu desplegables
   public suppliers: Proveedores[] = [];
   public unidades: UnidadArticulo[] = [];
-  public tipos: string[] = [];
+  public tipos: TipoArticulo[] = [];
 
   public isLoadingResults: boolean = true;
 
@@ -86,7 +86,7 @@ export class NewArticlesComponent implements OnInit {
     private _suppliersService: SuppliersService,
     private _variablesService: VariablesService
   ) {
-      this.tipos = Global.tipos;
+      
   }
 
   get codigo() {
@@ -112,6 +112,7 @@ export class NewArticlesComponent implements OnInit {
   ngOnInit(): void {
     this.loadSuppliers();
     this.loadUnidades();
+    this.loadTipoArticulo();
   }
 
   loadSuppliers() {
@@ -158,6 +159,24 @@ export class NewArticlesComponent implements OnInit {
       .subscribe();
   }
 
+  loadTipoArticulo() {
+
+    this._variablesService.getTipoArticulo()
+      .pipe(
+        tap(data => {
+          this.tipos = data;
+
+        }),
+        catchError(err => {
+          console.log("Error cargando los Tipos de Articulos ", err);
+          this._securityService.logout();
+          this._router.navigateByUrl("/");
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
+  }
   createNewArticle() {
     let bodydata: NewArticle = {
       codigo: this.codigo.value !== null ? this.codigo.value : '',
