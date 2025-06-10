@@ -65,7 +65,7 @@ const MATERIAL_MODULES = [
 })
 export class OrdersComponent implements OnInit, AfterViewInit {
 
-  public displayedColumns: string[] = ['codigo_articulo', 'nombre_proveedor', 'tipo_movimiento', 'cantidad', 'fecha_movimiento', 'numero_remito', 'nombre_usuario', 'numero_orden'];
+  public displayedColumns: string[] = ['codigo_articulo', 'nombre_proveedor', 'tipo_movimiento', "origen", 'cantidad', 'fecha_movimiento', 'numero_remito', 'nombre_usuario', 'numero_orden'];
   public url: string;
   public data: Ordenes[] = [];
   public pageNumber: number = 0;
@@ -256,6 +256,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
           // limit errors, we do not want to reset the paginator to zero, as that
           // would prevent users from re-triggering requests.
           this.resultsLength = data.total_registros;
+          console.log(data.ordenes);
           return data.ordenes;
         }),
       )

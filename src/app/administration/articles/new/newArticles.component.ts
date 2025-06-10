@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { SecurityService } from '../../../services/security.service';
@@ -21,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { Imagen } from '../../../interfaces/client.interface';
+import { ListArticlesComponent } from '../list/listArticles.component';
 
 declare var window: any;
 
@@ -36,6 +37,7 @@ const MATERIAL_MODULES = [MatInputModule, MatSelectModule, MatFormFieldModule, M
 })
 export class NewArticlesComponent implements OnInit {
 
+  @ViewChild(ListArticlesComponent) listArticlesComponent!: ListArticlesComponent;
   //Variables para seleccionar listas
   public selectedProveedor: string = "";
   public selectedUnidad: string = "";
@@ -130,7 +132,7 @@ export class NewArticlesComponent implements OnInit {
 
         }),
         catchError(err => {
-          console.log("Error cargando los Proveedores ", err);
+          alert(err.error.message);
           this._securityService.logout();
           this._router.navigateByUrl("/");
           return throwError(err);
@@ -149,7 +151,7 @@ export class NewArticlesComponent implements OnInit {
 
         }),
         catchError(err => {
-          console.log("Error cargando las Unidades de proveedores ", err);
+          alert(err.error.message);
           this._securityService.logout();
           this._router.navigateByUrl("/");
           return throwError(err);
@@ -168,7 +170,7 @@ export class NewArticlesComponent implements OnInit {
 
         }),
         catchError(err => {
-          console.log("Error cargando los Tipos de Articulos ", err);
+          alert(err.error.message);
           this._securityService.logout();
           this._router.navigateByUrl("/");
           return throwError(err);
@@ -191,11 +193,11 @@ export class NewArticlesComponent implements OnInit {
         next: (resultado) => {
             alert("Articulo creado con exito a las " + new Date());
             this.formNewArticle.reset();
-            //this._router.navigateByUrl('/home/administration/articles');
-            window.location.reload();
+            this.ngOnInit();
+            this.listArticlesComponent.ngAfterViewInit();
         },
         error: (error) => {
-          console.log(error);
+          alert(error.error.message);
           if (error.status == 403 || error.status == 401 || error.status == 500) {
 
             alert("ERROR al crear el articulo!!!");

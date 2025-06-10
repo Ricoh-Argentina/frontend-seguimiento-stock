@@ -79,43 +79,70 @@
     }
   }
   
-  .mat-column-codigo {
-    width: 10%;
-    max-width: 10%;
-    border-right: 1px solid black;
-    padding-right: 24px;
-    text-align: center;
-  }
-  
-  .mat-column-descripcion {
-    width: 35%;
-    max-width: 35%;
-    border-right: 1px solid black;
-    padding-right: 24px;
-    text-align: center;
-  }
-  
-  .mat-column-unidad {
+  .mat-column-codigo_articulo {
     width: 15%;
     max-width: 15%;
-    border-right: 1px solid black;
     padding-right: 24px;
-    text-align: left;
+    text-align: center;
   }
   
+  .mat-column-nombre_proveedor {
+    width: 15%;
+    max-width: 15%;
+    padding-right: 24px;
+    text-align: center;
+  }
+
+  .mat-column-tipo_movimiento {
+    width: 10%;
+    max-width: 10%;
+    padding-right: 24px;
+    text-align: center;
+  }
+
+  .mat-column-origen {
+    width: 10%;
+    max-width: 10%;
+    padding-right: 24px;
+    text-align: center;
+  }
+
   .mat-column-cantidad {
     width: 10%;
     max-width: 10%;
-    border-right: 1px solid black;
     padding-right: 24px;
     text-align: left;
     color: rgb(209, 101, 101);
     font-weight: bold;
   }
+
   
-  .mat-column-proveedores {
-    width: 30%;
-    max-width: 30%;
+  .mat-column-fecha_movimiento {
+    width: 10%;
+    max-width: 10%;
     padding-right: 24px;
-    text-align: center;
+    text-align: left;
   }
+
+  .mat-column-numero_remito {
+    width: 10%;
+    max-width: 10%;
+    padding-right: 24px;
+    text-align: left;
+  }
+
+  .mat-column-nombre_usuario {
+    width: 10%;
+    max-width: 10%;
+    padding-right: 24px;
+    text-align: left;
+  }
+
+  .mat-column-numero_orden {
+    width: 10%;
+    max-width: 10%;
+    padding-right: 24px;
+    text-align: left;
+  }
+  
+  

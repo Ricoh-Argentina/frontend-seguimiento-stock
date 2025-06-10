@@ -24,11 +24,9 @@ const generatePDF = (
 
   const content: any[] = [];
 
-  console.log(data);
-
+  
   data.forEach((element) => {
-    console.log(element);
-
+    
     content.push({
       columns: [
         {

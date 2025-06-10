@@ -86,5 +86,6 @@ export interface Ordenes {
     nombre_usuario:   string;
     numero_orden:     number;
     numero_remito:    string;
+    origen:           string;
 }
 

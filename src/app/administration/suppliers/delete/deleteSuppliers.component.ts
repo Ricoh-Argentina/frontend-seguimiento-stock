@@ -186,8 +186,7 @@ export class DeleteSuppliersComponent implements OnInit, AfterViewInit {
           this.isLoadingResults = false;
         }),
         catchError(err => {
-          console.log("Error cargando los datos de Proveedores ", err);
-          alert("Error cargando los datos de Proveedores ");
+          alert(err.error.message);
           return throwError(err);
         }),
         finalize(() => this.isLoadingResults = false)
@@ -207,15 +206,14 @@ export class DeleteSuppliersComponent implements OnInit, AfterViewInit {
       {
         next: (resultado) => {
           //Guardo en el sessionStorage el usuario y el token
-          console.log(resultado);
           this.formEditProveedor.reset();
           this.isformEditSupplierActive=true;
         },
         error: (error) => {
-          console.log(error);
+          alert(error.error.message);
           if (error.status == 403 || error.status == 404) {
 
-            alert("ERROR al Eliminar el Proveedor!!!");
+            alert(error.error.message);
           }
         },
         complete: () => alert("Proveedor borrado con exito")

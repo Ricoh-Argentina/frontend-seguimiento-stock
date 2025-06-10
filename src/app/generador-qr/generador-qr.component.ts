@@ -157,7 +157,7 @@ export class GeneradorQrComponent implements OnInit {
 
         }),
         catchError(err => {
-          console.log("Error cargando los Articulos ", err);
+          alert(err.error.message);
           this._securityService.logout();
           this._router.navigateByUrl("/");
           return throwError(err);
@@ -185,8 +185,7 @@ export class GeneradorQrComponent implements OnInit {
           this.formQRGenerator.controls.nombre_proveedor.enable();
         }),
         catchError(err => {
-          console.log("Error cargando los datos de Articulos ", err);
-          alert("Error cargando los datos de Articulos ");
+          alert(err.error.message);
           return throwError(err);
         }),
         finalize(() => this.isLoadingResults = false)
@@ -196,12 +195,12 @@ export class GeneradorQrComponent implements OnInit {
   }
 
   changeProveedor() {
-    console.log(this.selectedProveedor);
+    //console.log(this.selectedProveedor);
     
     /*******************************************/
     /* Revisar este codigo cuando se modifique permitir otras secuencias */
     let bodydata: GetSecuencia = {
-      tipo: "bobina",
+      tipo: this.articuloSeleccionado[0].tipo_articulo,
     };
     /*******************************************/
 
@@ -213,8 +212,7 @@ export class GeneradorQrComponent implements OnInit {
           this.formQRGenerator.controls.descripcion.enable();
         }),
         catchError(err => {
-          console.log("Error solicitando la secuencia del producto", err);
-          alert("Error solicitando la secuencia del producto ");
+          alert(err.error.message);
           return throwError(err);
         }),
         finalize(() => this.isLoadingResults = false)
@@ -252,12 +250,10 @@ export class GeneradorQrComponent implements OnInit {
     this._qrService.generatorQr(bodydata)
       .pipe(
         tap(data => {
-          console.log(data);
           generatePDF([data]);
         }),
         catchError(err => {
-          console.log("Error solicitando la secuencia del producto", err);
-          alert("Error solicitando la secuencia del producto ");
+          alert(err.error.message);
           return throwError(err);
         }),
         finalize(() => {
@@ -294,10 +290,9 @@ export class GeneradorQrComponent implements OnInit {
       this._qrService.generatorQrFile(formData).subscribe({
         next: (result: QrResponseFile) => {
           generatePDF(result.result);
-          //console.log(result.result);
         },
         error: (err: HttpErrorResponse) => {
-          console.log(err);
+          alert(err.error.message);
         },
         complete: () => {
           console.log("Peticion completada");

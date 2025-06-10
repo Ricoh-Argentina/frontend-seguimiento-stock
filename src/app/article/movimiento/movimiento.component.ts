@@ -160,11 +160,11 @@ export class MovimientoComponent implements OnInit {
     this._articlesService.getArticles(bodydata)
       .pipe(
         tap(data => {
-          this.codigos = data.articulos;
+          this.codigos = data.articulos.filter(articulo => articulo.esta_activo === true);
 
         }),
         catchError(err => {
-          console.log("Error cargando los Articulos ", err);
+          alert(err.error.message);
           this._securityService.logout();
           this._router.navigateByUrl("/");
           return throwError(err);
@@ -223,7 +223,7 @@ export class MovimientoComponent implements OnInit {
 
           if (error.status == 403 || error.status == 401 || error.status == 500) {
 
-            alert("ERROR al crear la Orden!!!");
+            alert(error.error.message);
           }
         },
         complete: () => console.info('Peticion Completada')
@@ -252,8 +252,7 @@ export class MovimientoComponent implements OnInit {
           this.formNewOrder.controls.nombre_proveedor.enable();
         }),
         catchError(err => {
-          console.log("Error cargando los datos de Articulos ", err);
-          alert("Error cargando los datos de Articulos ");
+          alert(err.error.message);
           return throwError(err);
         }),
         finalize(() => this.isLoadingResults = false)
@@ -308,8 +307,7 @@ export class MovimientoComponent implements OnInit {
           alert("Orden creada con exito");
         }),
         catchError(err => {
-          console.log("Error descontando el articulo ", err);
-          alert("Error descontando el articulo ");
+          alert(err.error.message);
           return throwError(err);
         }),
         finalize(() => this.isLoadingResults = false)
