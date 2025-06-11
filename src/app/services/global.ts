@@ -1,5 +1,8 @@
 export var Global = {
-    url: "http://fernando.ricoh-argentina-lab.com:4000/",
+    //VPS
+    //url: "http://fernando.ricoh-argentina-lab.com:4000/",
+    //STOCK V2
+    url: "https://172.21.39.122/api/",
     //url: "http://localhost:3000/",
     //url: "http://172.21.39.122:3000/",
     avatares: ["Avatar1.png",
