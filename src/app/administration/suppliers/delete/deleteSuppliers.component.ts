@@ -36,13 +36,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 import { catchError, finalize, tap, throwError } from 'rxjs';
+import { ActivePipePipe } from "../../../pipes/active-pipe.pipe";
 
 const MATERIAL_MODULES = [MatCheckboxModule, MatSlideToggleModule, MatButtonModule, MatDatepickerModule, MatSelectModule, MatTableModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSortModule, MatPaginatorModule, MatProgressSpinnerModule];
 
 @Component({
   selector: 'app-deleteSuppliers',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES, ActivePipePipe],
   templateUrl: './deleteSuppliers.component.html',
   styleUrl: './deleteSuppliers.component.scss',
   providers: [SuppliersService, SecurityService, ReportsService, provideNativeDateAdapter()]

@@ -41,6 +41,7 @@ import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl,
 import { catchError, finalize, tap, throwError } from 'rxjs';
 import { ArticleSearch, Articulo } from '../../interfaces/article.interface';
 import { ArticlesService } from '../../services/articles.service';
+import { ActivePipePipe } from "../../pipes/active-pipe.pipe";
 
 const MATERIAL_MODULES = [
   MatDatepickerModule,
@@ -58,7 +59,7 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'app-inventory',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES, ActivePipePipe],
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.scss',
   animations: [

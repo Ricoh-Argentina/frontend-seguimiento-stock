@@ -56,7 +56,7 @@
                     <mat-select formControlName="tipo_movimiento" #tipo_movimiento name="tipo_movimiento"
                         [(value)]="selectedMovimiento" (valueChange)="changeMovimiento()">
                         @for (movimiento of movimientos; track movimientos) {
-                        <mat-option [value]="movimiento">{{movimiento}}</mat-option>
+                        <mat-option [value]="movimiento">{{movimiento | titlecase}}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>

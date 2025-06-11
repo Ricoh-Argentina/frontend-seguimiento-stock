@@ -36,6 +36,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 import { catchError, finalize, tap, throwError } from 'rxjs';
+import { ActivePipePipe } from "../../../pipes/active-pipe.pipe";
 
 
 const MATERIAL_MODULES = [MatButtonModule, MatDatepickerModule, MatSelectModule, MatTableModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSortModule, MatPaginatorModule, MatProgressSpinnerModule];
@@ -44,7 +45,7 @@ const MATERIAL_MODULES = [MatButtonModule, MatDatepickerModule, MatSelectModule,
 @Component({
   selector: 'app-listArticles',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES, ActivePipePipe],
   templateUrl: './listArticles.component.html',
   styleUrl: './listArticles.component.scss',
   animations: [

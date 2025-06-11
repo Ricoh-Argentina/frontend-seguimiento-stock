@@ -36,7 +36,7 @@
 
             <!-- cantidad_total Column -->
             <ng-container matColumnDef="cantidad_total">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad Total </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> CANTIDAD </th>
                 <td mat-cell *matCellDef="let row"> {{row.cantidad_total}} </td>
             </ng-container>
 
@@ -52,8 +52,10 @@
 
             <!-- esta_activo Column -->
             <ng-container matColumnDef="esta_activo">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Activo </th>
-                <td mat-cell *matCellDef="let row"> {{row.esta_activo}} </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ESTADO </th>
+                <td mat-cell *matCellDef="let row"
+                    [ngStyle]="{ 'color': row.esta_activo ? 'rgb(60,179,113)' : 'rgb(209, 101, 101)' }">
+                    {{row.esta_activo | activePipe}} </td>
             </ng-container>
 
 
@@ -88,7 +90,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="esta_activo">
                                     <th mat-header-cell *matHeaderCellDef>Activo</th>
-                                    <td mat-cell *matCellDef="let line"> {{line.esta_activo}} </td>
+                                     <td mat-cell *matCellDef="let line" [ngStyle]="{ 'color': line.esta_activo ? 'rgb(60,179,113)' : 'rgb(209, 101, 101)' }" > {{line.esta_activo | activePipe}} </td>
                                 </ng-container>
                                 <tr mat-header-row *matHeaderRowDef="displayedColumnsAux"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumnsAux;"></tr>

@@ -23,7 +23,7 @@
                         [(value)]="selectedClient" (selectionChange)="onChangeClient()">
                         <mat-option value="Todos">Todos</mat-option>
                         @for (clientes of clientes; track clientes) {
-                        <mat-option [value]="clientes.nombre_cliente">{{clientes.nombre_cliente}}</mat-option>
+                        <mat-option [value]="clientes.nombre_cliente">{{clientes.nombre_cliente | titlecase}}</mat-option>
                         }
                         <mat-option>None</mat-option>
                     </mat-select>
@@ -72,7 +72,7 @@
                 <!-- Cliente Column -->
                 <ng-container matColumnDef="cliente">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> CLIENTE </th>
-                    <td mat-cell *matCellDef="let row"> {{row.cliente}} </td>
+                    <td mat-cell *matCellDef="let row"> {{row.cliente | titlecase}} </td>
                 </ng-container>
 
                 <!-- Cantidad Column -->

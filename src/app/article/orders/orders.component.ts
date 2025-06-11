@@ -41,6 +41,8 @@ import { ArticlesService } from '../../services/articles.service';
 import { SupplierSearch } from '../../interfaces/suppliers.interface';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import 'moment/locale/es';
+import { VariablesService } from '../../services/variables.service';
+import { TipoMovimiento } from '../../interfaces/variables.interface';
 
 const MATERIAL_MODULES = [
   MatDatepickerModule,
@@ -61,13 +63,14 @@ const MATERIAL_MODULES = [
   imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss',
-  providers: [UserService, SecurityService, TaskListService, FileManagerService,  {provide: MAT_DATE_LOCALE, useValue: 'es-ES'}, provideMomentDateAdapter() ]
+  providers: [UserService, SecurityService, TaskListService, FileManagerService, { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, provideMomentDateAdapter()]
 })
 export class OrdersComponent implements OnInit, AfterViewInit {
 
   public displayedColumns: string[] = ['codigo_articulo', 'nombre_proveedor', 'tipo_movimiento', "origen", 'cantidad', 'fecha_movimiento', 'numero_remito', 'nombre_usuario', 'numero_orden'];
   public url: string;
   public data: Ordenes[] = [];
+  public tipoMovimientoEnum: TipoMovimiento[] = [];
   public pageNumber: number = 0;
   public totalRecords: number = 0;
   public pageLength: number = 20;
@@ -127,9 +130,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     private _formBuilder: FormBuilder,
     private _fileManagerService: FileManagerService,
     private _articlesService: ArticlesService,
+    private _variablesService: VariablesService
   ) {
     this.url = Global.url;
-    this.movimientos = Global.movimientos;
   }
 
   get codigo_articulo() {
@@ -151,6 +154,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.loadCodigoArticulos();
     this.loadSuppliers();
+    this.loadTipoMovimiento();
   }
 
   loadCodigoArticulos() {
@@ -201,7 +205,18 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         finalize(() => this.isLoadingResults = false)
       )
       .subscribe();
-  }
+
+    }
+    
+    loadTipoMovimiento() {
+      this._variablesService.getTipoMovimiento()
+        .pipe(
+          tap(movimientos => {
+            this.movimientos = movimientos.map((m) => { return m.tipo_movimiento });
+          }),
+          finalize(() => this.isLoadingResults = false)
+        ).subscribe();
+    }
 
   /*********************************TABLA*********************************************/
 
@@ -269,7 +284,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     let eDate = this.endDate.value !== null ? this.endDate.value.toISOString() : "";
 
     this.isLoadingResults = true;
-    this.isDownloadFileDisabled=false;
+    this.isDownloadFileDisabled = false;
 
     let bodydata: OrdersSearch = {
       fecha_inicio: sDate,
@@ -351,7 +366,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       formato: "csv",
       nombre_proveedor: this.nombre_proveedor.value ?? "",
       codigo_articulo: this.codigo_articulo.value ?? "",
-      tipo_movimiento:  this.tipo_movimiento.value ?? "",
+      tipo_movimiento: this.tipo_movimiento.value ?? "",
       nombre_usuario: "",
       numero_orden: 0,
       numero_remito: this.numero_remito.value ?? ""

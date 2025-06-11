@@ -47,7 +47,7 @@ const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, 
 })
 export class MovimientoComponent implements OnInit {
 
-  
+
 
   //Variables para seleccionar listas
   public selectedCodigo: string = "";
@@ -121,7 +121,6 @@ export class MovimientoComponent implements OnInit {
     private dialog: MatDialog,
     private _qrService: QrService
   ) {
-    this.movimientos = Global.movimientos;
   }
 
 
@@ -147,6 +146,7 @@ export class MovimientoComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCodigoArticulos();
+    this.loadTipoMovimiento();
   }
 
   loadCodigoArticulos() {
@@ -172,6 +172,16 @@ export class MovimientoComponent implements OnInit {
         finalize(() => this.isLoadingResults = false)
       )
       .subscribe();
+  }
+
+  loadTipoMovimiento() {
+    this._variablesService.getTipoMovimiento()
+      .pipe(
+        tap(movimientos => {
+          this.movimientos = movimientos.map((m) => { return m.tipo_movimiento });
+        }),
+          finalize(() => this.isLoadingResults = false)
+        ).subscribe();
   }
 
   cancelOrder() {
@@ -246,7 +256,7 @@ export class MovimientoComponent implements OnInit {
         tap(data => {
           this.articuloSeleccionado = data.articulos;
           this.formNewOrder.controls.nombre_proveedor.setValue("");
-          this.proveedores = data.articulos[0].proveedores;
+          this.proveedores = data.articulos[0].proveedores.filter((p) => p.esta_activo === true) ;
           this.formNewOrder.controls.descripcion.setValue(data.articulos[0].descripcion);
           this.formNewOrder.controls.cantidadStock.setValue(data.articulos[0].cantidad_total);
           this.formNewOrder.controls.nombre_proveedor.enable();

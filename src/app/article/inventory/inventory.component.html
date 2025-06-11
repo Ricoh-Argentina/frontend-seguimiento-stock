@@ -61,7 +61,7 @@
                 <!-- Cantidad Column -->
                 <ng-container matColumnDef="cantidad_total">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> CANTIDAD TOTAL </th>
-                    <td mat-cell *matCellDef="let row"> {{row.cantidad_total}} </td>
+                    <td mat-cell *matCellDef="let row" [ngStyle]="{ 'color': row.cantidad_total > 0 ? 'rgb(60,179,113)' : 'rgb(209, 101, 101)'}"> {{row.cantidad_total}} </td>
                 </ng-container>
 
                 <!-- Proveedores Column -->
@@ -76,8 +76,8 @@
 
                 <!-- esta_activo Column -->
                 <ng-container matColumnDef="esta_activo">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Activo </th>
-                    <td mat-cell *matCellDef="let row"> {{row.esta_activo}} </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ESTADO </th>
+                    <td mat-cell *matCellDef="let row" [ngStyle]="{ 'color': row.esta_activo ? 'rgb(60,179,113)' : 'rgb(209, 101, 101)' }" > {{row.esta_activo | activePipe}} </td>
                 </ng-container>
 
 

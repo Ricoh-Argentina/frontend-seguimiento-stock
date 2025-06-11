@@ -40,6 +40,7 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 import { catchError, finalize, tap, throwError } from 'rxjs';
+import { ActivePipePipe } from "../../../pipes/active-pipe.pipe";
 
 
 const MATERIAL_MODULES = [MatDatepickerModule, MatSelectModule, MatTableModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSortModule, MatPaginatorModule, MatProgressSpinnerModule];
@@ -48,7 +49,7 @@ const MATERIAL_MODULES = [MatDatepickerModule, MatSelectModule, MatTableModule, 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES, ActivePipePipe],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
   providers: [UserService, SecurityService, ReportsService, provideNativeDateAdapter()]

@@ -13,7 +13,7 @@
                 <mat-select formControlName="tipo_producto" #tipo_producto name="tipo_producto"
                     [(value)]="selectedTipo">
                     @for (tipo of tipos; track tipos) {
-                    <mat-option [value]="tipo.tipo_articulo">{{tipo.tipo_articulo}}</mat-option>
+                    <mat-option [value]="tipo.tipo_articulo">{{tipo.tipo_articulo | titlecase}}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
