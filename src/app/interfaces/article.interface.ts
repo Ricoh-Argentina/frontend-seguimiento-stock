@@ -14,31 +14,35 @@ export interface ArticleResponse {
 }
 
 export interface Articulo {
-    codigo:      string;
-    descripcion: string;
-    unidad:      string;
-    cantidad:    number;
-    proveedores: Proveedores[];
+    codigo:         string;
+    descripcion:    string;
+    unidad:         string;
+    tipo_articulo:  string;
+    esta_activo:    boolean;
+    cantidad_total: number;
+    proveedores:    Proveedores[];
 }
 
 export interface Proveedores {
     nombre_proveedor: string;
+    cantidad:         number;
+    esta_activo:      boolean;
 }
-
 
 export interface NewArticle {
     codigo:      string;
     descripcion: string;
     unidad:      string;
     proveedores: string[];
-    cantidad:    number;
+    tipo_articulo: string;
 }
 
 export interface ArticleUpdateInterface {
     descripcion: string;
     unidad:      string;
     proveedores: string[];
-    cantidad:    number;
+    tipo_articulo: string;
+    esta_activo:      boolean;
 }
 
 export interface NewOrder {
@@ -82,5 +86,6 @@ export interface Ordenes {
     nombre_usuario:   string;
     numero_orden:     number;
     numero_remito:    string;
+    origen:           string;
 }
 

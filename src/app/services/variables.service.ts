@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SecurityService } from './security.service';
 import { Global } from './global';
-import { Rol, ModoImpresion, TamPapel, UnidadArticulo } from '../interfaces/variables.interface';
+import { Rol, ModoImpresion, TamPapel, UnidadArticulo, TipoMovimiento, TipoArticulo } from '../interfaces/variables.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +53,18 @@ export class VariablesService {
   getUnidadArticulos(): Observable<UnidadArticulo[]> {
 
     return this._http.get<UnidadArticulo[]>(this.url + 'variables/unidad-articulos', { headers: this.agregarAuthorizationHeader() });
+
+  }
+
+  getTipoMovimiento(): Observable<TipoMovimiento[]> {
+
+    return this._http.get<TipoMovimiento[]>(this.url + 'variables/tipo-movimiento', { headers: this.agregarAuthorizationHeader() });
+
+  }
+
+  getTipoArticulo(): Observable<TipoArticulo[]> {
+
+    return this._http.get<TipoArticulo[]>(this.url + 'variables/tipo-articulo', { headers: this.agregarAuthorizationHeader() });
 
   }
 }

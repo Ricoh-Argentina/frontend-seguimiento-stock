@@ -36,13 +36,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 import { catchError, finalize, tap, throwError } from 'rxjs';
+import { ActivePipePipe } from "../../../pipes/active-pipe.pipe";
 
 const MATERIAL_MODULES = [MatCheckboxModule, MatSlideToggleModule, MatButtonModule, MatDatepickerModule, MatSelectModule, MatTableModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSortModule, MatPaginatorModule, MatProgressSpinnerModule];
 
 @Component({
   selector: 'app-deleteSuppliers',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES, ActivePipePipe],
   templateUrl: './deleteSuppliers.component.html',
   styleUrl: './deleteSuppliers.component.scss',
   providers: [SuppliersService, SecurityService, ReportsService, provideNativeDateAdapter()]
@@ -186,8 +187,7 @@ export class DeleteSuppliersComponent implements OnInit, AfterViewInit {
           this.isLoadingResults = false;
         }),
         catchError(err => {
-          console.log("Error cargando los datos de Proveedores ", err);
-          alert("Error cargando los datos de Proveedores ");
+          alert(err.error.message);
           return throwError(err);
         }),
         finalize(() => this.isLoadingResults = false)
@@ -207,15 +207,14 @@ export class DeleteSuppliersComponent implements OnInit, AfterViewInit {
       {
         next: (resultado) => {
           //Guardo en el sessionStorage el usuario y el token
-          console.log(resultado);
           this.formEditProveedor.reset();
           this.isformEditSupplierActive=true;
         },
         error: (error) => {
-          console.log(error);
+          alert(error.error.message);
           if (error.status == 403 || error.status == 404) {
 
-            alert("ERROR al Eliminar el Proveedor!!!");
+            alert(error.error.message);
           }
         },
         complete: () => alert("Proveedor borrado con exito")

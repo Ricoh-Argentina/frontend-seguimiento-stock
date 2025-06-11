@@ -117,6 +117,11 @@ export class MenuComponent {
         }
       ]
     },
+    {
+      icon: 'qr_code',
+      label: 'Generador QR',
+      route: 'generador-qr',
+    },
   ]);
 
   profilePicSize= computed(()=> this.sideNavCollapsed() ? '32' : '100');

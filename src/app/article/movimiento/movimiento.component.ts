@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { ArticlesService } from '../../services/articles.service';
 import { SecurityService } from '../../services/security.service';
 import { VariablesService } from '../../services/variables.service';
 import { SuppliersService } from '../../services/suppliers.service';
+import { QrService } from '../../services/qr.service';
 import { Router } from '@angular/router';
 import { UserInterface } from '../../interfaces/user.interface';
 import { Rol } from '../../interfaces/variables.interface';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { catchError, finalize, tap, throwError } from 'rxjs';
 import { Global } from '../../services/global';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 /*Angular Material */
 import { MatInputModule } from '@angular/material/input';
@@ -23,9 +24,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Imagen } from '../../interfaces/client.interface';
 import { ArticleSearch, Articulo, NewOrder } from '../../interfaces/article.interface';
+import { QrRegistrar } from '../../interfaces/generador-qr.interface';
 //import { Proveedores } from '../../interfaces/suppliers.interface';
 import { Proveedores } from '../../interfaces/article.interface';
 import { state } from '@angular/animations';
+
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import 'moment/locale/es';
+import { MatDialog } from '@angular/material/dialog';
+import { QrScannerModalQrcodeComponent } from './qr-scanner-modal-qrcode/qr-scanner-modal-qrcode.component';
 
 const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatIconModule, MatButtonModule];
 
@@ -36,14 +43,17 @@ const MATERIAL_MODULES = [MatDatepickerModule, MatInputModule, MatSelectModule, 
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MATERIAL_MODULES],
   templateUrl: './movimiento.component.html',
   styleUrl: './movimiento.component.scss',
-  providers: [UserService, SecurityService, provideNativeDateAdapter()]
+  providers: [UserService, SecurityService, provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, provideMomentDateAdapter()]
 })
 export class MovimientoComponent implements OnInit {
+
+
 
   //Variables para seleccionar listas
   public selectedCodigo: string = "";
   public selectedProveedor: string = "";
   public selectedMovimiento: string = "";
+  public selectedQR: string = "";
 
   //String que levantan las listas de los menu desplegables
   public codigos: Articulo[] = [];
@@ -92,6 +102,13 @@ export class MovimientoComponent implements OnInit {
     ]]
   });
 
+  formQr = this._formBuilder.group({
+    dataQR: ['', [
+      Validators.required,
+      Validators.minLength(30),
+      Validators.maxLength(300)
+    ]]
+  });
 
 
   constructor(
@@ -100,9 +117,10 @@ export class MovimientoComponent implements OnInit {
     private _router: Router,
     private _formBuilder: FormBuilder,
     private _variablesService: VariablesService,
-    private _suppliersService: SuppliersService
+    private _suppliersService: SuppliersService,
+    private dialog: MatDialog,
+    private _qrService: QrService
   ) {
-    this.movimientos = Global.movimientos;
   }
 
 
@@ -128,6 +146,7 @@ export class MovimientoComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCodigoArticulos();
+    this.loadTipoMovimiento();
   }
 
   loadCodigoArticulos() {
@@ -141,11 +160,11 @@ export class MovimientoComponent implements OnInit {
     this._articlesService.getArticles(bodydata)
       .pipe(
         tap(data => {
-          this.codigos = data.articulos;
+          this.codigos = data.articulos.filter(articulo => articulo.esta_activo === true);
 
         }),
         catchError(err => {
-          console.log("Error cargando los Articulos ", err);
+          alert(err.error.message);
           this._securityService.logout();
           this._router.navigateByUrl("/");
           return throwError(err);
@@ -153,6 +172,16 @@ export class MovimientoComponent implements OnInit {
         finalize(() => this.isLoadingResults = false)
       )
       .subscribe();
+  }
+
+  loadTipoMovimiento() {
+    this._variablesService.getTipoMovimiento()
+      .pipe(
+        tap(movimientos => {
+          this.movimientos = movimientos.map((m) => { return m.tipo_movimiento });
+        }),
+          finalize(() => this.isLoadingResults = false)
+        ).subscribe();
   }
 
   cancelOrder() {
@@ -169,7 +198,11 @@ export class MovimientoComponent implements OnInit {
     this.formNewOrder.controls.cantidad.disable()
     this.formNewOrder.controls.numero_remito.disable();
     this.formNewOrder.controls.tipo_movimiento.disable();
-    
+
+  }
+
+  cancelQR() {
+    this.formQr.controls.dataQR.setValue("");
   }
 
   createNewOrder() {
@@ -200,7 +233,7 @@ export class MovimientoComponent implements OnInit {
 
           if (error.status == 403 || error.status == 401 || error.status == 500) {
 
-            alert("ERROR al crear la Orden!!!");
+            alert(error.error.message);
           }
         },
         complete: () => console.info('Peticion Completada')
@@ -223,14 +256,13 @@ export class MovimientoComponent implements OnInit {
         tap(data => {
           this.articuloSeleccionado = data.articulos;
           this.formNewOrder.controls.nombre_proveedor.setValue("");
-          this.proveedores = data.articulos[0].proveedores;
+          this.proveedores = data.articulos[0].proveedores.filter((p) => p.esta_activo === true) ;
           this.formNewOrder.controls.descripcion.setValue(data.articulos[0].descripcion);
-          this.formNewOrder.controls.cantidadStock.setValue(data.articulos[0].cantidad);
+          this.formNewOrder.controls.cantidadStock.setValue(data.articulos[0].cantidad_total);
           this.formNewOrder.controls.nombre_proveedor.enable();
         }),
         catchError(err => {
-          console.log("Error cargando los datos de Articulos ", err);
-          alert("Error cargando los datos de Articulos ");
+          alert(err.error.message);
           return throwError(err);
         }),
         finalize(() => this.isLoadingResults = false)
@@ -240,6 +272,10 @@ export class MovimientoComponent implements OnInit {
   }
 
   changeProveedor() {
+    const infoSelectedProveedor = this.proveedores.filter(objeto => {
+      return objeto.nombre_proveedor.toLowerCase().includes(this.selectedProveedor.toLowerCase());
+    });
+    this.formNewOrder.controls.cantidadStock.setValue(infoSelectedProveedor[0].cantidad);
     this.formNewOrder.controls.tipo_movimiento.enable();
   }
 
@@ -253,6 +289,40 @@ export class MovimientoComponent implements OnInit {
       this.formNewOrder.controls.numero_remito.disable();
     }
 
+  }
+
+  leerQR(): void {
+    const dialogRef = this.dialog.open(QrScannerModalQrcodeComponent, {
+      width: '450px',
+      height: '570px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.formQr.get('dataQR')?.setValue(result);
+        this.selectedQR = result;
+      }
+    });
+  }
+
+  descontarProducto() {
+    let bodydata: QrRegistrar = {
+      qr: this.selectedQR
+    }
+    this._qrService.registrarQr(bodydata)
+      .pipe(
+        tap(data => {
+          this.cancelQR();
+          alert("Orden creada con exito");
+        }),
+        catchError(err => {
+          alert(err.error.message);
+          return throwError(err);
+        }),
+        finalize(() => this.isLoadingResults = false)
+      )
+      .subscribe();
   }
 
   verifyDate() {

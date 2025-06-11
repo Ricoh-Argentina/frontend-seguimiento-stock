@@ -1,0 +1,99 @@
+<div class="container">
+    
+    <form class="container-form" [formGroup]="formQRGenerator">
+
+        <div class="form-row">
+
+            <mat-form-field appearance="outline" style="width: 30%;" floatLabel="auto">
+                <mat-label>Fecha Creación</mat-label>
+                <input matInput [matDatepicker]="picker1" [formControl]="DateSelected">
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                <mat-label>Código Artículo</mat-label>
+                <mat-select formControlName="codigo_articulo" #codigo_articulo name="codigo_articulo"
+                    [(value)]="selectedCodigo" (valueChange)="changeCodeArticle()">
+                    @for (codigo of codigos; track codigos) {
+                    <mat-option [value]="codigo.codigo">{{codigo.codigo}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                <mat-label>Nombre Proveedor</mat-label>
+                <mat-select formControlName="nombre_proveedor" #nombre_proveedor name="nombre_proveedor"
+                    [(value)]="selectedProveedor" (valueChange)="changeProveedor()">
+                    @for (proveedor of proveedores; track proveedores) {
+                    <mat-option [value]="proveedor.nombre_proveedor">{{proveedor.nombre_proveedor}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 35%;" floatLabel="auto">
+                <mat-label>Número secuencia</mat-label>
+                <input matInput type="number" formControlName="numero_secuencia" #numero_secuencia autofocus>
+            </mat-form-field>
+
+        </div>
+
+        <div class="form-row mt-25">
+
+            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+                <mat-label>Cantidad</mat-label>
+                <input matInput type="number" formControlName="cantidad" #cantidad autofocus>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 50%;" floatLabel="auto">
+                <mat-label>Peso</mat-label>
+                <input matInput type="number" formControlName="peso" #peso autofocus>
+            </mat-form-field>
+
+        </div>
+
+        
+        <div class="form-row mt-25">
+
+            <mat-form-field appearance="outline" style="width: 100%;" floatLabel="auto">
+                <mat-label>Descripcion</mat-label>
+                <input matInput type="text" formControlName="descripcion" #descripcion autofocus>
+            </mat-form-field>
+
+        </div>
+
+        <div class="form-row mt-25">
+
+            <button type="button" mat-flat-button color="warn" (click)="fileInput.click()" style="width: 20%; height: 55px;">Seleccionar Planilla</button>
+            <input hidden (change)="getFile($event)" #fileInput type="file">
+            <!--<span class="file-name">{{selectedFilesView}}</span>-->
+            <mat-form-field appearance="outline" style="width: 80%;" floatLabel="auto">
+                <input matInput type="text" formControlName="selectedFilesView" #selectedFilesView autofocus>
+            </mat-form-field>
+        </div>
+        
+        <div class="button-row">
+            <div class="form-flex-container">
+                <div class="button-container">
+                    <button mat-fab extended color="warn" (click)="cancelarLimpiarEtiqueta()" [disabled]="formQRGenerator.invalid">
+                        <mat-icon>cancel</mat-icon>
+                        Cancelar
+                    </button>
+                </div>
+                
+                <div class="button-container">
+                    <button mat-fab extended color="primary" (click)="imprimirEtiqueta()" [disabled]="formQRGenerator.invalid">
+                        <mat-icon>print</mat-icon>
+                        Imprimir
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="image">
+        <img src="../../../../assets/img/web-1738168_1920.jpg">
+    </div>
+
+</div>

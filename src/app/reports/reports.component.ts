@@ -31,12 +31,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import {provideNativeDateAdapter} from '@angular/material/core';
+import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
 import {MatTabsModule} from '@angular/material/tabs';
 
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 import { catchError, finalize, tap, throwError } from 'rxjs';
+
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import 'moment/locale/es';
 
 
 @Component({
@@ -45,7 +48,7 @@ import { catchError, finalize, tap, throwError } from 'rxjs';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, HttpClientModule, MatTabsModule, MatDatepickerModule, MatSelectModule, MatTableModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSortModule, MatPaginatorModule, MatProgressSpinnerModule],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
-  providers: [UserService, SecurityService, provideNativeDateAdapter()]
+  providers: [UserService, SecurityService, provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'es-ES'}, provideMomentDateAdapter()]
 })
 export class ReportsComponent {
 

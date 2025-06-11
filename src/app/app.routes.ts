@@ -14,6 +14,7 @@ import { ArticleComponent } from './article/article.component';
 import { InventoryComponent } from './article/inventory/inventory.component';
 import { MovimientoComponent } from './article/movimiento/movimiento.component';
 import { OrdersComponent } from './article/orders/orders.component';
+import { GeneradorQrComponent } from './generador-qr/generador-qr.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -43,6 +44,7 @@ export const routes: Routes = [
                     { path: 'orders', component: OrdersComponent },
                 ]
             },
+            { path: 'generador-qr', component: GeneradorQrComponent }, 
         ]
     },
     { path: '**', component: LoginComponent },

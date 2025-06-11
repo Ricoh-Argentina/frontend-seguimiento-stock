@@ -55,7 +55,7 @@ export class NewComponent implements OnInit {
       nombre_y_apellido: ['', [
         Validators.required,
         Validators.minLength(10),
-        Validators.maxLength(20)
+        Validators.maxLength(100)
       ]],
       rol: ['', [
         Validators.required,

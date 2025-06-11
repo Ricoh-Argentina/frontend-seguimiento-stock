@@ -33,12 +33,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button'
 import { provideNativeDateAdapter } from '@angular/material/core';
+/* Tabla varias filas en cada fila */
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 import { catchError, finalize, tap, throwError } from 'rxjs';
 import { ArticleSearch, Articulo } from '../../interfaces/article.interface';
 import { ArticlesService } from '../../services/articles.service';
+import { ActivePipePipe } from "../../pipes/active-pipe.pipe";
 
 const MATERIAL_MODULES = [
   MatDatepickerModule,
@@ -56,14 +59,23 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'app-inventory',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES, ActivePipePipe],
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.scss',
+  animations: [
+      trigger('detailExpand', [
+        state('collapsed,void', style({height: '0px', minHeight: '0'})),
+        state('expanded', style({height: '*'})),
+        transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      ]),
+    ],
   providers: [UserService, SecurityService, TaskListService, FileManagerService, provideNativeDateAdapter()]
 })
 export class InventoryComponent implements OnInit, AfterViewInit {
 
-  public displayedColumns: string[] = ['codigo', 'descripcion', 'unidad', 'cantidad','proveedores'];
+  public displayedColumns: string[] = ['codigo', 'descripcion', 'unidad', 'cantidad_total', 'proveedores', 'esta_activo'];
+  public displayedColumnsAux: string[] = ['nombre_proveedor', 'cantidad'];
+  public displayedColumnsWithExpand: string [] = [...this.displayedColumns, 'expand'];
   public url: string;
   public data: Articulo[] = [];
   public pageNumber: number = 0;
@@ -74,6 +86,9 @@ export class InventoryComponent implements OnInit, AfterViewInit {
   public resultsLength = 0;
   public isRateLimitReached = false;
   public isDownloadFileDisabled: boolean = true;
+
+  /* Tabla expansion */
+  public expandedElement: Articulo[] | null = [];
 
   //String que levantan las listas de los menu desplegables
   public clientes: Cliente[] = [];

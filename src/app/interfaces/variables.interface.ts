@@ -13,3 +13,11 @@ export interface TamPapel {
 export interface UnidadArticulo {
     unidad: string;
 }
+
+export interface TipoMovimiento {
+    tipo_movimiento: string;
+}
+
+export interface TipoArticulo {
+    tipo_articulo: string;
+}

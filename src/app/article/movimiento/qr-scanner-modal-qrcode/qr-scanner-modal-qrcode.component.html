@@ -1,0 +1,27 @@
+<div class="qr-scanner-container">
+    <h2 mat-dialog-title>Escanear Código QR</h2>
+    <mat-dialog-content>
+        @if (errorMessage) {
+            <div class="error-message">{{errorMessage}}</div>
+        }
+        @if (cameras.length > 1) {
+            <div class="camera-select">
+                <mat-form-field appearance="outline">
+                    <mat-label>Seleccionar Cámara</mat-label>
+                    <mat-select [(value)]="selectedCameraId" (selectionChange)="onCameraChange($event.value)">
+                        @for (cam of cameras; track cam.id) {
+                            <mat-option [value]="cam.id">{{cam.label}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        }
+        <div #qrContainer id="qr-container" class="qr-video"></div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button color="warn" (click)="cancelar()">
+            <mat-icon>close</mat-icon>
+            Cancelar
+        </button>
+    </mat-dialog-actions>
+</div>

@@ -23,7 +23,7 @@
                         [(value)]="selectedClient" (selectionChange)="onChangeClient()">
                         <mat-option value="Todos">Todos</mat-option>
                         @for (clientes of clientes; track clientes) {
-                        <mat-option [value]="clientes.nombre_cliente">{{clientes.nombre_cliente}}</mat-option>
+                        <mat-option [value]="clientes.nombre_cliente">{{clientes.nombre_cliente | titlecase}}</mat-option>
                         }
                         <mat-option>None</mat-option>
                     </mat-select>
@@ -35,7 +35,7 @@
                         [(value)]="selectedProduct">
                         <mat-option value="Todos">Todos</mat-option>
                         @for (productos of productos; track productos) {
-                        <mat-option [value]="productos.nombre_producto">{{productos.nombre_producto}}</mat-option>
+                        <mat-option [value]="productos.nombre_producto">{{productos.nombre_producto | titlecase}}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>
@@ -44,7 +44,6 @@
                     <mat-label>Fecha Inicio</mat-label>
                     <input matInput [matDatepicker]="picker1" [formControl]="startDate"
                         (dateChange)="verifyStartDate()">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
                     <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
@@ -52,7 +51,6 @@
                 <mat-form-field appearance="outline" floatLabel="auto">
                     <mat-label>Fecha Final</mat-label>
                     <input matInput [matDatepicker]="picker2" [formControl]="endDate" (dateChange)="verifyEndDate()">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
                     <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
@@ -85,13 +83,13 @@
                 <!-- Cliente Column -->
                 <ng-container matColumnDef="cliente">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> CLIENTE </th>
-                    <td mat-cell *matCellDef="let row"> {{row.cliente}} </td>
+                    <td mat-cell *matCellDef="let row"> {{row.cliente | titlecase}} </td>
                 </ng-container>
 
                 <!-- Producto Column -->
                 <ng-container matColumnDef="producto">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> PRODUCTO </th>
-                    <td mat-cell *matCellDef="let row"> {{row.producto}}</td>
+                    <td mat-cell *matCellDef="let row"> {{row.producto | titlecase}}</td>
                 </ng-container>
 
                 <!-- Tarea Column -->
@@ -109,7 +107,7 @@
                 <!-- Unidad Column -->
                 <ng-container matColumnDef="unidad">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> UNIDAD </th>
-                    <td mat-cell *matCellDef="let row"> {{row.unidad}} </td>
+                    <td mat-cell *matCellDef="let row"> {{row.unidad | titlecase}} </td>
                 </ng-container>
 
                 <!-- Fecha Column -->

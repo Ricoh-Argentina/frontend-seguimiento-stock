@@ -18,8 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { Rol, UnidadArticulo } from '../../../interfaces/variables.interface';
 import { UserResponse, Usuario, UserSearch, UserUpdateResponse, UserUpdateInterface } from '../../../interfaces/user.interface';
-import { ArticleSearch, ArticleResponse, Articulo, ArticleUpdateInterface, Proveedores, NewArticle } from '../../../interfaces/article.interface';
-
+import { ArticleSearch, ArticleResponse, Articulo, ArticleUpdateInterface, NewArticle } from '../../../interfaces/article.interface';
+import { Proveedores } from '../../../interfaces/suppliers.interface';
 
 /*Angular Material */
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -69,7 +69,7 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
   public isChecked: boolean = true;
 
   //Variables para seleccionar listas
-  public selectedProveedor: string = "";
+  public selectedProveedor: string []= [];
   public selectedUnidad: string = "";
 
   //String que levantan las listas de los menu desplegables
@@ -85,7 +85,7 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
   datoSeleccionado: boolean = false;
 
   //Form
-  public isCheckedPassword: boolean = false;
+  public isCheckedEstado: boolean = false;
   public isformEditArticleActive: boolean = true;
   public isAvailable: boolean = false;
 
@@ -111,6 +111,12 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
       Validators.minLength(5),
       Validators.maxLength(60)
     ]],
+    tipo_producto: [{ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(150)
+    ]],
+    estado: { value: false, disabled: false },
     unidad: [{ value: '', disabled: false }, [
       Validators.required,
       Validators.minLength(1),
@@ -121,7 +127,7 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
       Validators.minLength(1),
       Validators.maxLength(150)
     ]],
-    cantidad: [{ value: 0, disabled: false }, [
+    cantidad: [{ value: 0, disabled: true }, [
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(20)
@@ -281,6 +287,14 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
     return this.formEditArticle.controls['descripcion'];
   }
 
+  get tipo() {
+    return this.formEditArticle.controls['tipo_producto'];
+  }
+
+  get estado() {
+    return this.formEditArticle.controls['estado'];
+  }
+
   get unidad() {
     return this.formEditArticle.controls['unidad'];
   }
@@ -299,19 +313,20 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
 
       descripcion: this.descripcion.value !== null ? this.descripcion.value : '',
       unidad: this.unidad.value !== null ? this.unidad.value : '',
-      cantidad: this.cantidad.value !== null ? this.cantidad.value : 0,
       proveedores: [...this.selectedProveedor],
+      tipo_articulo: "bobina",
+      esta_activo: this.estado.value !== null ? this.estado.value : false
     };
 
     this._articlesService.updateArticle(bodydata, this.codigo.value !== null ? this.codigo.value : '').subscribe(
       {
         next: (resultado) => {
+          this.findArticle();
           alert("Modificacion de articulo exitosa");
           this.formEditArticle.reset();
         },
         error: (error) => {
           if (error.status == 403 || error.status == 401) {
-
             alert("ERROR al modificar el articulo!!!");
           }
         },
@@ -323,14 +338,26 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
   clickedRow(row: Articulo) {
     
     /* MODIFICAR: esta asignacion cuando se modifique */
-    const proveedoresString: string[]= row.proveedores.map((p)=>{
-      return p.nombre_proveedor;
+    const proveedoresString: string[]= [];
+    row.proveedores.forEach((p)=>{
+      if(p.esta_activo){
+        proveedoresString.push(p.nombre_proveedor);
+      }
     });
-    
+    //console.log(pro);
+
+    /*const proveedoresString: string[]= row.proveedores.map((p)=>{
+        return p.nombre_proveedor;      
+    });*/
+
+    this.selectedProveedor = proveedoresString;
+
     this.formEditArticle.controls.codigo.setValue(row.codigo);
     this.formEditArticle.controls.descripcion.setValue(row.descripcion);
+    this.formEditArticle.controls.tipo_producto.setValue(row.tipo_articulo);
+    this.formEditArticle.controls.estado.setValue(row.esta_activo);
     this.formEditArticle.controls.unidad.setValue(row.unidad);
-    this.formEditArticle.controls.cantidad.setValue(row.cantidad);  
+    this.formEditArticle.controls.cantidad.setValue(row.cantidad_total);  
     this.formEditArticle.controls.proveedores.setValue(proveedoresString);
     this.isformEditArticleActive = false;
   }
@@ -338,10 +365,16 @@ export class EditArticlesComponent implements OnInit, AfterViewInit {
   CancelForm() {
     this.formEditArticle.controls.codigo.setValue("");
     this.formEditArticle.controls.descripcion.setValue("");
+    this.formEditArticle.controls.tipo_producto.setValue("");
+    this.formEditArticle.controls.estado.setValue(false);
     this.formEditArticle.controls.unidad.setValue("");
     this.formEditArticle.controls.cantidad.setValue(0);
     this.formEditArticle.controls.proveedores.setValue([]);
     this.isformEditArticleActive = true;
-    this.isCheckedPassword = false;
+    this.isCheckedEstado = false;
+  }
+
+  isChangeEstado() {
+    this.formEditArticle.controls.estado.setValue(this.estado.value);
   }
 }

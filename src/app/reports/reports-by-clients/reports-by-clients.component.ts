@@ -34,9 +34,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button'
 
-import {provideNativeDateAdapter} from '@angular/material/core';
+import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
 import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { catchError, finalize, tap, throwError } from 'rxjs';
+
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import 'moment/locale/es';
 
 const MATERIAL_MODULES = [
   MatDatepickerModule, 
@@ -57,7 +60,7 @@ const MATERIAL_MODULES = [
   imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, MATERIAL_MODULES],
   templateUrl: './reports-by-clients.component.html',
   styleUrl: './reports-by-clients.component.scss',
-  providers: [UserService, SecurityService, FileManagerService, provideNativeDateAdapter()]
+  providers: [UserService, SecurityService, FileManagerService, provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'es-ES'}, provideMomentDateAdapter()]
 })
 export class ReportsByClientsComponent implements OnInit, AfterViewInit {
   public displayedColumns: string[] = ['cliente', 'imagenes', 'hojas'];
