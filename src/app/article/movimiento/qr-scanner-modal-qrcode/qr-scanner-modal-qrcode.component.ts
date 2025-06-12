@@ -30,7 +30,7 @@ export class QrScannerModalQrcodeComponent implements OnInit, OnDestroy {
   scanning: boolean = false;
   errorMessage: string = '';
 
-  constructor(public dialogRef: MatDialogRef<QrScannerModalQrcodeComponent>) {}
+  constructor(public dialogRef: MatDialogRef<QrScannerModalQrcodeComponent>) { }
 
   ngOnInit(): void {
     Html5Qrcode.getCameras().then(devices => {
@@ -83,13 +83,7 @@ export class QrScannerModalQrcodeComponent implements OnInit, OnDestroy {
   }
 
   cancelar(): void {
-    if (this.scanning && this.html5QrCode) {
-      this.html5QrCode.stop().then(() => {
-        this.dialogRef.close();
-      });
-    } else {
-      this.dialogRef.close();
-    }
+    this.dialogRef.close();
   }
 
   ngOnDestroy(): void {

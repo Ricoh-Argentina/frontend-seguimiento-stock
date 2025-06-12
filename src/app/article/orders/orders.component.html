@@ -118,9 +118,9 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> CANTIDAD </th>
                     <td mat-cell *matCellDef="let row" [ngStyle]="{ 'color': row.tipo_movimiento === 'ingreso' ? 'rgb(60,179,113)' : 'rgb(209, 101, 101)'}">
                         @if (row.tipo_movimiento === 'ingreso') {
-                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_upward_alt" style="height: 19px;"></mat-icon>
+                            <mat-icon style="height: 19px;">arrow_upward</mat-icon>
                         }@else {
-                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_downward" style="height: 19px;"></mat-icon>
+                            <mat-icon style="height: 19px;">arrow_downward</mat-icon>
                         }
                         <span>
                             {{row.cantidad}} 
