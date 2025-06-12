@@ -47,7 +47,6 @@ export class BarChartComponent implements OnInit, OnChanges {
 
 
   RenderChartSimple(labelData: any, valueData: any, colorData: any, unitData: any, type: any, id: any) {
-    console.log({labelData, valueData, colorData, unitData, type, id});
     this.myChart = new Chart(id, {
       type: type,
       data: {

@@ -303,7 +303,6 @@ export class DeleteComponent implements OnInit, AfterViewInit {
       {
         next: (resultado) => {
           //Guardo en el sessionStorage el usuario y el token
-          console.log("Resultado" + resultado);
           this.formEditUser.reset();
         },
         error: (error) => {
