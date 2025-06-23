@@ -17,6 +17,7 @@ export interface Cliente {
     nombre_cliente: string;
     fecha_creacion: Date;
     imagen:         Imagen;
+    estado:         boolean;
 }
 
 export enum Imagen {

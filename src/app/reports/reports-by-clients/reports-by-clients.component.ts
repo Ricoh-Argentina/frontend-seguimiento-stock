@@ -94,8 +94,6 @@ export class ReportsByClientsComponent implements OnInit, AfterViewInit {
   formFilter = this._formBuilder.group({
     clienteSeleccionado: ['', [
       Validators.required,
-      Validators.minLength(4),
-      Validators.maxLength(20)
     ]]
   });
 
@@ -128,7 +126,7 @@ export class ReportsByClientsComponent implements OnInit, AfterViewInit {
     this._reportsService.getClients()
       .pipe(
         tap(data => {
-          this.clientes = data.clientes;
+          this.clientes = data.clientes.filter((c) => c.estado === true);
           this.selectedClient = 'Todos';
           this.selectedProduct = 'Todos';
         }),

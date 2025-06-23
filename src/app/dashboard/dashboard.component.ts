@@ -142,7 +142,8 @@ export class DashboardComponent implements OnInit {
     .subscribe(
       {
         next: (data) => {
-          this.QtyClients = data.total_registros;
+          const clients = data.clientes.filter((c) => c.estado === true);
+          this.QtyClients = clients.length;
         },
         error: (error) => {
           if (error.status == 400 || error.status == 403 || error.status == 401) {
