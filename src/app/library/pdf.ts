@@ -43,13 +43,13 @@ const generatePDF = (
 
     content.push({
       qr: element.qr,
-      fit: 280,
+      fit: 160,
       alignment: "center",
       margin: [0, 0, 0, 0],
     });
 
 
-    content.push({ text: "\n\n\n\n" });
+    content.push({ text: "\n" });
 
   });
 
@@ -84,11 +84,11 @@ const generatePDF = (
       subject: "PDF_Subject",
     },
     pageSize: {
-      width: 428, //80 mm
-      height: 428 //80 mm
+      width: 400, //75 mm
+      height: 267 //50 mm
     },
     //[left,top,right,bottom]
-    pageMargins: [0, 30, 0, 0],
+    pageMargins: [0, 20, 0, 0],
     content,
     styles,
   };
