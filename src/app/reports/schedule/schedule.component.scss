@@ -1,0 +1,149 @@
+.container {
+    display: flex;
+    width: 100ih;
+    height: calc(100vh - 115px);
+    margin: 0px auto;
+    overflow: hidden;
+    flex-direction: column;
+    text-align: center;
+    border: 3px solid rgb(209, 101, 101);
+    border-radius: 20px;
+    --mat-sort-arrow-color: white;
+}
+
+.table {
+    overflow: auto;
+    width: 100%;
+}
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+}
+
+.form-flex-container mat-form-field+mat-form-field {
+    margin-left: 20px;
+}
+
+/*********************************************/
+.button-row {
+    display: table-cell;
+    max-width: 600px;
+    margin-left: 20px;
+}
+
+.button-row .mat-mdc-button-base {
+    margin: 0px 0px 0px 0;
+}
+
+.form-flex-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 120px;
+}
+
+/*********************************************/
+
+.table-estilos {
+
+    th {
+        background-color: rgb(209, 101, 101);
+        color: white;
+    }
+
+    tr {
+        height: 30px;
+    }
+
+    tr:hover {
+        background: whitesmoke;
+        cursor: pointer;
+    }
+}
+
+.mat-column-FechaHora {
+    width: 8%;
+    max-width: 10%;
+    border-right: 1px solid black;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-Reporte {
+    width: 8%;
+    max-width: 10%;
+    border-right: 1px solid black;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-Periodicidad {
+    width: 5%;
+    max-width: 10%;
+    padding-right: 24px;
+    text-align: center;
+    border-right: 1px solid black;
+}
+
+.mat-column-Destinatarios {
+    width: 10%;
+    max-width: 10%;
+    border-right: 1px solid black;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-Resultado {
+    width: 8%;
+    max-width: 10%;
+    padding-right: 24px;
+    text-align: center;
+    border-right: 1px solid black;
+}
+
+.mat-column-Detalle {
+    width: 5%;
+    max-width: 10%;
+    padding-right: 24px;
+    text-align: center;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+
+.mat-dialog-content {
+  padding-top: 16px;
+  padding-bottom: 8px;
+  margin: 3%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mat-form-field {
+  flex: 1;
+}
+
+.mat-icon-button {
+  margin-left: 8px;
+}
+
+.mat-dialog-actions {
+  margin-top: 16px;
+}
+
+.mat-dialog-actions button {
+  min-width: 80px;
+}

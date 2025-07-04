@@ -1,0 +1,37 @@
+.mat-dialog-content {
+  padding-top: 16px;
+  padding-bottom: 8px;
+  margin: 3%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.mat-form-field {
+  flex: 1;
+}
+
+.mat-icon-button {
+  margin-left: 8px;
+}
+
+.mat-dialog-actions {
+  margin-top: 16px;
+}
+
+.mat-dialog-actions button {
+  min-width: 80px;
+}
+
+h2 {
+    margin: 5%;
+}
+
+.mat-mdc-form-field {
+    margin: 3%;
+    width: 100%;
+}
