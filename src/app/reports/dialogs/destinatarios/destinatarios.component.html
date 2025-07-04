@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Editar destinatarios</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <div formArrayName="items">
+    @for (ctrl of items.controls; track ctrl; let idx = $index){
+    <div class="row">
+      <mat-form-field>
+        <input matInput [formControlName]="idx" placeholder="Destinatario {{ idx + 1 }}">
+      </mat-form-field>
+      <button mat-icon-button color="warn" (click)="remove(idx)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+
+  @if (items.length < 5) {
+      <button mat-button (click)="add()" style="margin-top:8px; margin-left: 15px;">+ Agregar destinatario</button>
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="close()">Cancelar</button>
+  @if (items.length > 0) {
+      <button mat-button color="warn" (click)="submit()">Aceptar</button>
+  }
+</mat-dialog-actions>

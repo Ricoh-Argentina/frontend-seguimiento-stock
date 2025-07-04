@@ -62,9 +62,14 @@ export class MenuComponent {
           route: 'client',
         },
         {
-          icon: 'square_dot',
+          icon: 'shopping_bag',
           label: 'Producto',
           route: 'product',
+        },
+        {
+          icon: 'alarm',
+          label: 'Prog. envíos',
+          route: 'schedule'
         }
       ]
     },

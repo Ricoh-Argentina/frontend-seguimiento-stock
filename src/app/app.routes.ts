@@ -15,6 +15,7 @@ import { InventoryComponent } from './article/inventory/inventory.component';
 import { MovimientoComponent } from './article/movimiento/movimiento.component';
 import { OrdersComponent } from './article/orders/orders.component';
 import { GeneradorQrComponent } from './generador-qr/generador-qr.component';
+import { ScheduleComponent } from './reports/schedule/schedule.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -27,6 +28,7 @@ export const routes: Routes = [
                 children: [
                     { path: 'client', component: ReportsByClientsComponent }, 
                     { path: 'product', component: ReportsByProductsComponent },
+                    { path: 'schedule', component: ScheduleComponent}
                 ]
             },
             { path: 'dashboard', component: DashboardComponent },
